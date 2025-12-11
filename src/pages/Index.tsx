@@ -30,8 +30,9 @@ const Index = () => {
             Faça Parte da Nossa Comunidade
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Preencha o formulário abaixo para receber conteúdos exclusivos sobre 
-            estudar nos Estados Unidos, dicas de inglês e muito mais!
+            Cada história importa — inclusive a sua. Quero conhecer um pouco mais de você 
+            e também da nossa comunidade, para criar conteúdos que falem com os seus sonhos, 
+            as suas dúvidas e o seu caminho.
           </p>
         </div>
 

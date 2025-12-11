@@ -10,8 +10,8 @@ import { Loader2, Send, CheckCircle } from "lucide-react";
 import PersonalDataSection from "./form-sections/PersonalDataSection";
 import EducationSection from "./form-sections/EducationSection";
 import ProfessionalSection from "./form-sections/ProfessionalSection";
-import ProgramSection from "./form-sections/ProgramSection";
 import FinancialSection from "./form-sections/FinancialSection";
+import USAInterestsSection from "./form-sections/USAInterestsSection";
 import EnglishSection from "./form-sections/EnglishSection";
 import CommunicationSection from "./form-sections/CommunicationSection";
 
@@ -20,18 +20,17 @@ const formSchema = z.object({
   email: z.string().email("Email inválido").max(255),
   country: z.string().min(1, "Selecione seu país"),
   countryOther: z.string().optional(),
-  phone: z.string().min(8, "Telefone inválido").max(20),
+  phone: z.string().max(20).optional(),
   educationLevel: z.string().min(1, "Selecione seu nível de educação"),
   educationLevelOther: z.string().optional(),
   studyArea: z.string().min(1, "Informe sua área de estudo").max(100),
   graduationYear: z.string().min(1, "Selecione o ano de conclusão"),
-  yearsExperience: z.string().min(1, "Selecione seus anos de experiência"),
-  workArea: z.string().min(1, "Informe sua área de atuação").max(100),
-  programType: z.string().min(1, "Selecione o tipo de programa"),
-  programTypeOther: z.string().optional(),
-  mainQuestions: z.string().max(500).optional(),
-  investmentCapacity: z.string().min(1, "Selecione sua capacidade de investimento"),
-  scholarshipInterest: z.string().min(1, "Selecione seu interesse em bolsas"),
+  isCurrentlyWorking: z.string().min(1, "Selecione uma opção"),
+  workArea: z.string().max(100).optional(),
+  yearsExperience: z.string().optional(),
+  financialSituation: z.string().optional(),
+  usaInterests: z.array(z.string()).optional(),
+  usaInterestsOther: z.string().optional(),
   englishLevel: z.string().min(1, "Selecione seu nível de inglês"),
   howDidYouFind: z.string().min(1, "Informe como nos conheceu"),
   howDidYouFindOther: z.string().optional(),
@@ -63,13 +62,12 @@ const LeadForm = () => {
       educationLevelOther: "",
       studyArea: "",
       graduationYear: "",
-      yearsExperience: "",
+      isCurrentlyWorking: "",
       workArea: "",
-      programType: "",
-      programTypeOther: "",
-      mainQuestions: "",
-      investmentCapacity: "",
-      scholarshipInterest: "",
+      yearsExperience: "",
+      financialSituation: "",
+      usaInterests: [],
+      usaInterestsOther: "",
       englishLevel: "",
       howDidYouFind: "",
       howDidYouFindOther: "",
@@ -213,8 +211,8 @@ const LeadForm = () => {
         <PersonalDataSection form={form} />
         <EducationSection form={form} />
         <ProfessionalSection form={form} />
-        <ProgramSection form={form} />
         <FinancialSection form={form} />
+        <USAInterestsSection form={form} />
         <EnglishSection form={form} />
         <CommunicationSection form={form} />
 
