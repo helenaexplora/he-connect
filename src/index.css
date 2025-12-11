@@ -1,96 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Helena Explora Color Scheme - Professional Blue & Cream */
+    --background: 40 33% 96%;
+    --foreground: 220 50% 18%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 40 30% 98%;
+    --card-foreground: 220 50% 18%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 40 30% 98%;
+    --popover-foreground: 220 50% 18%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 220 70% 22%;
+    --primary-foreground: 40 30% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 40 25% 90%;
+    --secondary-foreground: 220 50% 18%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 20% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 200 80% 45%;
+    --accent-foreground: 40 30% 98%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 40 30% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 40 20% 85%;
+    --input: 40 20% 88%;
+    --ring: 220 70% 22%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
+    /* Chat colors */
+    --chat-primary: 220 70% 22%;
+    --chat-secondary: 200 80% 45%;
+    --chat-bubble-user: 220 70% 22%;
+    --chat-bubble-assistant: 40 25% 92%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Sidebar */
+    --sidebar-background: 40 30% 96%;
+    --sidebar-foreground: 220 50% 18%;
+    --sidebar-primary: 220 70% 22%;
+    --sidebar-primary-foreground: 40 30% 98%;
+    --sidebar-accent: 40 25% 90%;
+    --sidebar-accent-foreground: 220 50% 18%;
+    --sidebar-border: 40 20% 85%;
+    --sidebar-ring: 200 80% 45%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 220 50% 10%;
+    --foreground: 40 30% 96%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 220 45% 14%;
+    --card-foreground: 40 30% 96%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 220 45% 14%;
+    --popover-foreground: 40 30% 96%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 40 30% 92%;
+    --primary-foreground: 220 50% 12%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 220 40% 20%;
+    --secondary-foreground: 40 30% 96%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 220 40% 18%;
+    --muted-foreground: 40 20% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 200 80% 50%;
+    --accent-foreground: 220 50% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 40 30% 96%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 220 40% 20%;
+    --input: 220 40% 20%;
+    --ring: 40 30% 92%;
+
+    --chat-primary: 40 30% 92%;
+    --chat-secondary: 200 80% 50%;
+    --chat-bubble-user: 220 45% 25%;
+    --chat-bubble-assistant: 220 40% 18%;
+
+    --sidebar-background: 220 45% 12%;
+    --sidebar-foreground: 40 30% 96%;
+    --sidebar-primary: 200 80% 50%;
+    --sidebar-primary-foreground: 220 50% 10%;
+    --sidebar-accent: 220 40% 18%;
+    --sidebar-accent-foreground: 40 30% 96%;
+    --sidebar-border: 220 40% 20%;
+    --sidebar-ring: 200 80% 50%;
   }
 }
 
@@ -100,6 +105,72 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .section-title {
+    @apply text-lg font-semibold text-primary flex items-center gap-2 mb-4;
+  }
+
+  .form-section {
+    @apply bg-card rounded-xl p-6 shadow-sm border border-border;
+  }
+
+  .chatbot-bounce {
+    animation: bounce-attention 2s ease-in-out infinite;
+  }
+
+  .chatbot-pulse {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(220 60% 30%) 100%);
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(200 70% 55%) 100%);
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@keyframes bounce-attention {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--accent) / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 15px hsl(var(--accent) / 0);
+  }
+}
+
+/* Cloudflare Turnstile styling */
+.cf-turnstile {
+  @apply flex justify-center;
 }
