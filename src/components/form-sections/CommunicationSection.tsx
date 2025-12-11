@@ -16,9 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { LeadFormData } from "../LeadForm";
 
 interface Props {
-  form: UseFormReturn<any>;
+  form: UseFormReturn<LeadFormData>;
 }
 
 const howDidYouFindOptions = [
