@@ -35,6 +35,7 @@ const formSchema = z.object({
   howDidYouFind: z.string().min(1, "Informe como nos conheceu"),
   howDidYouFindOther: z.string().optional(),
   contactPreference: z.string().min(1, "Selecione sua preferência de contato"),
+  whatsappContact: z.string().max(20).optional(),
   additionalMessage: z.string().max(1000).optional(),
 });
 
@@ -72,6 +73,7 @@ const LeadForm = () => {
       howDidYouFind: "",
       howDidYouFindOther: "",
       contactPreference: "",
+      whatsappContact: "",
       additionalMessage: "",
     },
   });
