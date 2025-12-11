@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# Helena Explora - Lead Capture Website
 
-## Project info
+Website de captura de leads para Helena Explora, criadora de conteúdo sobre estudar nos Estados Unidos.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 🎯 Objetivo
 
-## How can I edit this code?
+Capturar leads de pessoas interessadas em programas de estudo nos EUA, fornecendo informações através de um chatbot de IA e enviando emails automáticos de boas-vindas.
 
-There are several ways of editing your application.
+## 🛠️ Tecnologias
 
-**Use Lovable**
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
+- **Backend**: Lovable Cloud (Edge Functions)
+- **Email**: Resend
+- **IA**: Lovable AI (Google Gemini)
+- **Segurança**: Cloudflare Turnstile (CAPTCHA)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📋 Funcionalidades
 
-Changes made via Lovable will be committed automatically to this repo.
+### Formulário de Captura (7 Seções)
+1. **Dados Pessoais** - Nome, email, país, telefone
+2. **Formação Académica** - Nível, área, ano de conclusão
+3. **Experiência Profissional** - Anos, área de atuação
+4. **Programa de Interesse** - Tipo de programa, dúvidas
+5. **Capacidade Financeira** - Investimento, bolsas
+6. **Nível de Inglês** - Iniciante a Fluente
+7. **Comunicação** - Como conheceu, preferência de contato
 
-**Use your preferred IDE**
+### Mini-Chatbot "Assistente Explora"
+- Responde dúvidas sobre estudo nos EUA
+- Posicionado no canto inferior direito
+- Animação para chamar atenção do usuário
+- Inclui disclaimer sobre informações gerais
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Emails Automáticos
+- **Para Helena**: Notificação com todos os dados do lead
+- **Para o lead**: Email de boas-vindas com links das redes sociais
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🔒 Segurança
 
-Follow these steps:
+- ✅ **CAPTCHA Cloudflare Turnstile** - Previne spam
+- ✅ **Sanitização de inputs** - Previne XSS no HTML do email
+- ✅ **Rate limiting** - 5 requisições por minuto por IP
+- ✅ **Mascaramento de logs** - Dados sensíveis não aparecem nos logs
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🎨 Design
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- **Cores**: Azul profissional (#0a2458) e creme (#f5f0e8)
+- **Fontes**: Playfair Display (títulos), Inter (corpo)
+- **Slogan**: "Sonhar é o primeiro visto. O resto é coragem."
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 📁 Estrutura
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/
+│   ├── Header.tsx
+│   ├── Footer.tsx
+│   ├── LeadForm.tsx
+│   ├── AIChatbot.tsx
+│   └── form-sections/
+│       ├── PersonalDataSection.tsx
+│       ├── EducationSection.tsx
+│       ├── ProfessionalSection.tsx
+│       ├── ProgramSection.tsx
+│       ├── FinancialSection.tsx
+│       ├── EnglishSection.tsx
+│       └── CommunicationSection.tsx
+├── pages/
+│   └── Index.tsx
+└── assets/
+    └── he-logo.jpg
+
+supabase/functions/
+├── send-lead-email/index.ts
+└── chat/index.ts
 ```
 
-**Edit a file directly in GitHub**
+## 🔗 Redes Sociais
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- YouTube: [@helenaexplora](https://www.youtube.com/@helenaexplora)
+- Instagram: [@helenaexplora_usa](https://www.instagram.com/helenaexplora_usa)
+- TikTok: [@helenaexplora](https://www.tiktok.com/@helenaexplora)
 
-**Use GitHub Codespaces**
+## 📧 Contato
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Email para leads: helenaexplora@hmpedro.com
