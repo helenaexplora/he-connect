@@ -45,7 +45,7 @@ const Footer = () => {
           </div>
           
           <p className="text-sm opacity-80 text-center">
-            © {new Date().getFullYear()} Helena Explora. Compartilhando experiências sobre estudar nos EUA.
+            © {new Date().getFullYear()} Helena Explora. Sonhar é o primeiro visto. O resto é coragem. 🛩🇺🇸
           </p>
           
           <p className="text-xs opacity-60 text-center max-w-md">
