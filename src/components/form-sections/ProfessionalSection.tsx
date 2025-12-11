@@ -81,7 +81,7 @@ const ProfessionalSection = ({ form }: Props) => {
               name="workArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Em que área?</FormLabel>
+                  <FormLabel>Área de Atuação</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Marketing, TI, Finanças, etc." {...field} />
                   </FormControl>
@@ -95,7 +95,7 @@ const ProfessionalSection = ({ form }: Props) => {
               name="yearsExperience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Quantos anos de experiência?</FormLabel>
+                  <FormLabel>Anos de Experiência</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
