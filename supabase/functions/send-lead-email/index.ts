@@ -1,12 +1,11 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const TURNSTILE_SECRET = Deno.env.get("TURNSTILE_SECRET_KEY");
 const RECIPIENT_EMAIL = "helenaexplora@hmpedro.com";
 
@@ -16,6 +15,7 @@ const RATE_LIMIT = 5;
 const RATE_WINDOW = 60000; // 1 minute
 
 function sanitizeHtml(str: string): string {
+  if (!str) return "";
   return str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -54,6 +54,27 @@ function checkRateLimit(ip: string): boolean {
   if (record.count >= RATE_LIMIT) return false;
   record.count++;
   return true;
+}
+
+async function sendEmail(to: string[], subject: string, html: string): Promise<void> {
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "Helena Explora <onboarding@resend.dev>",
+      to,
+      subject,
+      html,
+    }),
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`Resend error: ${error}`);
+  }
 }
 
 serve(async (req) => {
@@ -141,18 +162,8 @@ serve(async (req) => {
     `;
 
     await Promise.all([
-      resend.emails.send({
-        from: "Helena Explora <onboarding@resend.dev>",
-        to: [RECIPIENT_EMAIL],
-        subject: `📋 Novo Lead: ${sanitizeHtml(fullName)}`,
-        html: leadHtml,
-      }),
-      resend.emails.send({
-        from: "Helena Explora <onboarding@resend.dev>",
-        to: [email],
-        subject: "🌎 Bem-vindo(a) à Comunidade Helena Explora!",
-        html: welcomeHtml,
-      }),
+      sendEmail([RECIPIENT_EMAIL], `📋 Novo Lead: ${sanitizeHtml(fullName)}`, leadHtml),
+      sendEmail([email], "🌎 Bem-vindo(a) à Comunidade Helena Explora!", welcomeHtml),
     ]);
 
     console.log("Emails sent successfully");
