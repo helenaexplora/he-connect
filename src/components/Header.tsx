@@ -18,9 +18,6 @@ const Header = () => {
           <p className="text-xl md:text-2xl font-serif italic opacity-90 max-w-2xl">
             "Sonhar é o primeiro visto. O resto é coragem."
           </p>
-          <p className="text-sm md:text-base opacity-80 max-w-xl">
-            Compartilhando minha jornada como estudante internacional nos Estados Unidos
-          </p>
         </div>
       </div>
     </header>

@@ -10,18 +10,25 @@ interface Message {
   content: string;
 }
 
-const INITIAL_MESSAGE = `Olá! 👋 Sou o Assistente Explora!
+const INITIAL_MESSAGE = `Olá! 👋 Sou o Assistente Explora.
 
-Estou aqui para responder suas dúvidas sobre estudar nos Estados Unidos. Posso falar sobre:
+Este é o website oficial do projeto Helena Explora, criado para ajudar você que sonha estudar ou viver nos Estados Unidos.
 
-• Programas de estudo
+Posso te explicar:
+• O que é este website e o projeto Helena Explora
+• Para que serve o formulário "Faça Parte da Nossa Comunidade"
+• Programas de estudo nos EUA
 • Diferenças entre CPT e OPT
-• Dicas de inglês
-• Vida acadêmica
-• Processos de aplicação
-• Bolsas de estudo
+• Bolsas de estudo, vida acadêmica e dicas de inglês
 
-Como posso ajudar você hoje?`;
+Como posso te ajudar hoje?`;
+
+const SUGGESTIONS = [
+  "Me fale sobre este website",
+  "O que é o formulário 'Faça Parte da Nossa Comunidade'?",
+  "Como funciona CPT/OPT?",
+  "Quero estudar nos EUA, por onde começo?",
+];
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +38,7 @@ const AIChatbot = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -57,12 +65,13 @@ const AIChatbot = () => {
     }
   }, [isOpen]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (messageText?: string) => {
+    const textToSend = messageText || input.trim();
+    if (!textToSend || isLoading) return;
 
-    const userMessage = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+    setShowSuggestions(false);
+    setMessages((prev) => [...prev, { role: "user", content: textToSend }]);
     setIsLoading(true);
 
     try {
@@ -75,7 +84,7 @@ const AIChatbot = () => {
             Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
-            messages: [...messages, { role: "user", content: userMessage }],
+            messages: [...messages, { role: "user", content: textToSend }],
           }),
         }
       );
@@ -253,6 +262,21 @@ const AIChatbot = () => {
                   </div>
                 </div>
               )}
+              
+              {/* Suggestion buttons */}
+              {showSuggestions && messages.length === 1 && !isLoading && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {SUGGESTIONS.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSend(suggestion)}
+                      className="text-xs bg-secondary/50 hover:bg-secondary text-secondary-foreground border border-border rounded-full px-3 py-1.5 transition-colors"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </ScrollArea>
 
@@ -269,7 +293,7 @@ const AIChatbot = () => {
                 className="flex-1"
               />
               <Button
-                onClick={handleSend}
+                onClick={() => handleSend()}
                 disabled={!input.trim() || isLoading}
                 size="icon"
               >
