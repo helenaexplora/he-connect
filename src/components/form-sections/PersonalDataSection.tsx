@@ -118,7 +118,7 @@ const PersonalDataSection = ({ form }: Props) => {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Telefone (com código do país) *</FormLabel>
+              <FormLabel>Telefone (com código do país)</FormLabel>
               <FormControl>
                 <Input placeholder="+55 11 99999-9999" {...field} />
               </FormControl>

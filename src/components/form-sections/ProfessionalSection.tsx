@@ -21,6 +21,13 @@ interface Props {
   form: UseFormReturn<LeadFormData>;
 }
 
+const workingOptions = [
+  "Sim, trabalho atualmente",
+  "Não, estou buscando oportunidades",
+  "Não, sou estudante em tempo integral",
+  "Prefiro não responder",
+];
+
 const experienceLevels = [
   "Sem experiência",
   "Menos de 1 ano",
@@ -31,6 +38,9 @@ const experienceLevels = [
 ];
 
 const ProfessionalSection = ({ form }: Props) => {
+  const isWorking = form.watch("isCurrentlyWorking");
+  const showWorkDetails = isWorking === "Sim, trabalho atualmente";
+
   return (
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.2s" }}>
       <h2 className="section-title">
@@ -38,13 +48,13 @@ const ProfessionalSection = ({ form }: Props) => {
         Experiência Profissional
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
-          name="yearsExperience"
+          name="isCurrentlyWorking"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Anos de Experiência *</FormLabel>
+              <FormLabel>Você trabalha atualmente? *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -52,9 +62,9 @@ const ProfessionalSection = ({ form }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {experienceLevels.map((level) => (
-                    <SelectItem key={level} value={level}>
-                      {level}
+                  {workingOptions.map((option) => (
+                    <SelectItem key={option} value={option}>
+                      {option}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -64,19 +74,48 @@ const ProfessionalSection = ({ form }: Props) => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="workArea"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Área de Atuação *</FormLabel>
-              <FormControl>
-                <Input placeholder="Ex: Marketing, TI, Finanças, etc." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {showWorkDetails && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="workArea"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Em que área?</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Marketing, TI, Finanças, etc." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="yearsExperience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantos anos de experiência?</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {experienceLevels.map((level) => (
+                        <SelectItem key={level} value={level}>
+                          {level}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -20,37 +20,28 @@ interface Props {
   form: UseFormReturn<LeadFormData>;
 }
 
-const investmentCapacities = [
-  "Até $10.000 USD/ano",
-  "$10.000 - $25.000 USD/ano",
-  "$25.000 - $50.000 USD/ano",
-  "Mais de $50.000 USD/ano",
-  "Preciso de bolsa integral",
-  "Prefiro não informar",
-];
-
-const scholarshipInterests = [
-  "Sim, estou buscando bolsas ativamente",
-  "Sim, mas não é essencial",
-  "Não, tenho recursos próprios",
-  "Ainda estou avaliando",
+const financialSituations = [
+  "Tenho alguns recursos e estou a pesquisar opções",
+  "Tenho poucos recursos e procuro caminhos possíveis",
+  "Não tenho recursos disponíveis, mas quero entender opções gerais",
+  "Prefiro não responder",
 ];
 
 const FinancialSection = ({ form }: Props) => {
   return (
-    <div className="form-section animate-fade-in" style={{ animationDelay: "0.4s" }}>
+    <div className="form-section animate-fade-in" style={{ animationDelay: "0.3s" }}>
       <h2 className="section-title">
         <DollarSign className="w-5 h-5" />
-        Capacidade Financeira
+        Situação Financeira (opcional)
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
-          name="investmentCapacity"
+          name="financialSituation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Capacidade de Investimento *</FormLabel>
+              <FormLabel>Como você descreveria a sua situação atual relacionada ao seu sonho de estudar fora?</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -58,34 +49,9 @@ const FinancialSection = ({ form }: Props) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {investmentCapacities.map((capacity) => (
-                    <SelectItem key={capacity} value={capacity}>
-                      {capacity}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="scholarshipInterest"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Interesse em Bolsas de Estudo *</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {scholarshipInterests.map((interest) => (
-                    <SelectItem key={interest} value={interest}>
-                      {interest}
+                  {financialSituations.map((situation) => (
+                    <SelectItem key={situation} value={situation}>
+                      {situation}
                     </SelectItem>
                   ))}
                 </SelectContent>
