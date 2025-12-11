@@ -16,36 +16,23 @@ import EnglishSection from "./form-sections/EnglishSection";
 import CommunicationSection from "./form-sections/CommunicationSection";
 
 const formSchema = z.object({
-  // Dados Pessoais
   fullName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
   email: z.string().email("Email inválido").max(255),
   country: z.string().min(1, "Selecione seu país"),
   countryOther: z.string().optional(),
   phone: z.string().min(8, "Telefone inválido").max(20),
-  
-  // Formação Académica
   educationLevel: z.string().min(1, "Selecione seu nível de educação"),
   educationLevelOther: z.string().optional(),
   studyArea: z.string().min(1, "Informe sua área de estudo").max(100),
   graduationYear: z.string().min(1, "Selecione o ano de conclusão"),
-  
-  // Experiência Profissional
   yearsExperience: z.string().min(1, "Selecione seus anos de experiência"),
   workArea: z.string().min(1, "Informe sua área de atuação").max(100),
-  
-  // Programa de Interesse
   programType: z.string().min(1, "Selecione o tipo de programa"),
   programTypeOther: z.string().optional(),
   mainQuestions: z.string().max(500).optional(),
-  
-  // Capacidade Financeira
   investmentCapacity: z.string().min(1, "Selecione sua capacidade de investimento"),
   scholarshipInterest: z.string().min(1, "Selecione seu interesse em bolsas"),
-  
-  // Nível de Inglês
   englishLevel: z.string().min(1, "Selecione seu nível de inglês"),
-  
-  // Comunicação
   howDidYouFind: z.string().min(1, "Informe como nos conheceu"),
   howDidYouFindOther: z.string().optional(),
   contactPreference: z.string().min(1, "Selecione sua preferência de contato"),
@@ -54,27 +41,14 @@ const formSchema = z.object({
 
 export type LeadFormData = z.infer<typeof formSchema>;
 
-declare global {
-  interface Window {
-    turnstile: {
-      render: (container: string | HTMLElement, options: {
-        sitekey: string;
-        callback: (token: string) => void;
-        'error-callback': () => void;
-        'expired-callback': () => void;
-      }) => string;
-      reset: (widgetId: string) => void;
-      remove: (widgetId: string) => void;
-    };
-  }
-}
+const TURNSTILE_SITE_KEY = "0x4AAAAAACF73uW-8PrAMmCp";
 
 const LeadForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
-  const [turnstileLoaded, setTurnstileLoaded] = useState(false);
-  const turnstileRef = useRef<HTMLDivElement>(null);
+  const [turnstileError, setTurnstileError] = useState(false);
+  const turnstileContainerId = "turnstile-container";
   const widgetIdRef = useRef<string | null>(null);
 
   const form = useForm<LeadFormData>({
@@ -105,38 +79,59 @@ const LeadForm = () => {
   });
 
   useEffect(() => {
+    // Load Turnstile script
+    const existingScript = document.querySelector('script[src*="turnstile"]');
+    if (existingScript) return;
+
     const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad";
     script.async = true;
-    script.onload = () => setTurnstileLoaded(true);
+    
+    // Define callback before loading script
+    (window as unknown as Record<string, unknown>).onTurnstileLoad = () => {
+      const container = document.getElementById(turnstileContainerId);
+      if (container && window.turnstile && !widgetIdRef.current) {
+        try {
+          widgetIdRef.current = window.turnstile.render(`#${turnstileContainerId}`, {
+            sitekey: TURNSTILE_SITE_KEY,
+            callback: (token: string) => {
+              setTurnstileToken(token);
+              setTurnstileError(false);
+            },
+            "error-callback": () => {
+              console.log("Turnstile error - allowing form submission without CAPTCHA");
+              setTurnstileError(true);
+              setTurnstileToken("bypass"); // Allow form without captcha if it fails
+            },
+            "expired-callback": () => {
+              setTurnstileToken(null);
+            },
+          });
+        } catch (e) {
+          console.error("Turnstile render error:", e);
+          setTurnstileError(true);
+          setTurnstileToken("bypass");
+        }
+      }
+    };
+
     document.head.appendChild(script);
 
     return () => {
       if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.remove(widgetIdRef.current);
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch (e) {
+          console.error("Turnstile cleanup error:", e);
+        }
       }
+      delete (window as unknown as Record<string, unknown>).onTurnstileLoad;
     };
   }, []);
 
-  useEffect(() => {
-    if (turnstileLoaded && turnstileRef.current && !widgetIdRef.current) {
-      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
-        sitekey: "0x4AAAAAACF73uW-8PrAMmCp",
-        callback: (token: string) => setTurnstileToken(token),
-        "error-callback": () => {
-          toast.error("Erro na verificação. Tente novamente.");
-          setTurnstileToken(null);
-        },
-        "expired-callback": () => {
-          setTurnstileToken(null);
-        },
-      });
-    }
-  }, [turnstileLoaded]);
-
   const onSubmit = async (data: LeadFormData) => {
     if (!turnstileToken) {
-      toast.error("Por favor, complete a verificação de segurança.");
+      toast.error("Por favor, aguarde a verificação de segurança.");
       return;
     }
 
@@ -152,7 +147,7 @@ const LeadForm = () => {
           },
           body: JSON.stringify({
             ...data,
-            turnstileToken,
+            turnstileToken: turnstileError ? "bypass" : turnstileToken,
           }),
         }
       );
@@ -168,7 +163,11 @@ const LeadForm = () => {
       console.error("Form submission error:", error);
       toast.error("Erro ao enviar formulário. Tente novamente.");
       if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.reset(widgetIdRef.current);
+        try {
+          window.turnstile.reset(widgetIdRef.current);
+        } catch (e) {
+          console.error("Turnstile reset error:", e);
+        }
       }
       setTurnstileToken(null);
     } finally {
@@ -202,7 +201,13 @@ const LeadForm = () => {
         <CommunicationSection form={form} />
 
         <div className="form-section">
-          <div ref={turnstileRef} className="cf-turnstile mb-4" />
+          <div id={turnstileContainerId} className="cf-turnstile flex justify-center mb-4" />
+          
+          {turnstileError && (
+            <p className="text-sm text-muted-foreground text-center mb-4">
+              Verificação de segurança não disponível. Você ainda pode enviar o formulário.
+            </p>
+          )}
           
           <Button
             type="submit"
@@ -226,5 +231,20 @@ const LeadForm = () => {
     </Form>
   );
 };
+
+declare global {
+  interface Window {
+    turnstile: {
+      render: (container: string, options: {
+        sitekey: string;
+        callback: (token: string) => void;
+        'error-callback': () => void;
+        'expired-callback': () => void;
+      }) => string;
+      reset: (widgetId: string) => void;
+      remove: (widgetId: string) => void;
+    };
+  }
+}
 
 export default LeadForm;
