@@ -16,10 +16,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LeadFormData } from "../LeadForm";
 
 interface Props {
-  form: UseFormReturn<LeadFormData>;
+  form: UseFormReturn<any>;
 }
 
 const howDidYouFindOptions = [
@@ -34,12 +33,13 @@ const howDidYouFindOptions = [
 const contactPreferences = [
   "Email",
   "WhatsApp",
-  "Telefone",
+  "Zoom/Google Meet",
   "Qualquer um",
 ];
 
 const CommunicationSection = ({ form }: Props) => {
   const watchHowDidYouFind = form.watch("howDidYouFind");
+  const watchContactPreference = form.watch("contactPreference");
 
   return (
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.6s" }}>
@@ -114,6 +114,22 @@ const CommunicationSection = ({ form }: Props) => {
             </FormItem>
           )}
         />
+
+        {watchContactPreference === "WhatsApp" && (
+          <FormField
+            control={form.control}
+            name="whatsappContact"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Contacto WhatsApp *</FormLabel>
+                <FormControl>
+                  <Input placeholder="+351 912 345 678" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
         <div className="md:col-span-2">
           <FormField
