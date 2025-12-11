@@ -75,7 +75,7 @@ async function sendEmail(to: string[], subject: string, html: string): Promise<v
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "Helena Explora <onboarding@resend.dev>",
+      from: "Helena Explora <noreply@helenaexplora.hmpedro.com>",
       to,
       subject,
       html,
