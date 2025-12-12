@@ -32,7 +32,7 @@ const FinancialSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.3s" }}>
       <h2 className="section-title">
         <DollarSign className="w-5 h-5" />
-        Situação Financeira (opcional)
+        Situação Financeira *
       </h2>
 
       <div className="grid grid-cols-1 gap-4">

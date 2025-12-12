@@ -29,7 +29,7 @@ const formSchema = z.object({
   workArea: z.string().max(100).optional(),
   yearsExperience: z.string().optional(),
   previousWork: z.string().max(500).optional(),
-  financialSituation: z.string().optional(),
+  financialSituation: z.string().min(1, "Selecione uma opção"),
   usaInterests: z.array(z.string()).optional(),
   usaInterestsOther: z.string().optional(),
   englishLevel: z.string().min(1, "Selecione seu nível de inglês"),
