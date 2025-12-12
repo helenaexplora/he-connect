@@ -28,7 +28,8 @@ Capturar leads de pessoas interessadas em programas de estudo nos EUA, fornecend
 ### Mini-Chatbot "Assistente Explora"
 - Responde dúvidas sobre estudo nos EUA
 - Posicionado no canto inferior direito
-- Animação para chamar atenção do usuário
+- Bolha de boas-vindas auto-oculta após 8 segundos
+- Sugestões rápidas na primeira interação
 - Inclui disclaimer sobre informações gerais
 
 ### Emails Automáticos
