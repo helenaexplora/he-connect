@@ -73,12 +73,17 @@ async function sendEmail(to: string[], subject: string, html: string): Promise<v
     headers: {
       "Authorization": `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json",
+      "X-Entity-Ref-ID": crypto.randomUUID(), // Prevents threading issues
     },
     body: JSON.stringify({
-      from: "Helena Explora <noreply@helenaexplora.hmpedro.com>",
+      from: "Helena Explora <ola@helenaexplora.hmpedro.com>",
       to,
       subject,
       html,
+      headers: {
+        "X-Entity-Ref-ID": crypto.randomUUID(),
+      },
+      tags: [{ name: "category", value: "lead" }],
     }),
   });
   
