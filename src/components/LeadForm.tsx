@@ -272,6 +272,13 @@ const LeadForm = () => {
               </>
             )}
           </Button>
+          
+          <p className="text-xs text-muted-foreground text-center mt-4">
+            Os seus dados são usados apenas para compreender melhor a comunidade. Veja a nossa{" "}
+            <a href="/privacidade" className="text-primary hover:underline">
+              Política de Privacidade
+            </a>.
+          </p>
         </div>
       </form>
     </Form>

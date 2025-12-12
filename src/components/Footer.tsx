@@ -1,11 +1,12 @@
-import { Youtube, Instagram } from "lucide-react";
+import { Youtube, Instagram, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="bg-primary text-primary-foreground py-8 px-4 mt-12">
       <div className="container mx-auto">
         <div className="flex flex-col items-center gap-6">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-wrap justify-center">
             <a
               href="https://www.youtube.com/@helenaexplora"
               target="_blank"
@@ -42,6 +43,30 @@ const Footer = () => {
               </svg>
               <span className="text-sm">TikTok</span>
             </a>
+            <a
+              href="mailto:helenaexplora@hmpedro.com"
+              className="hover:opacity-80 transition-opacity flex items-center gap-2"
+              aria-label="Email"
+            >
+              <Mail className="w-5 h-5" />
+              <span className="text-sm">Email</span>
+            </a>
+          </div>
+          
+          <div className="flex items-center gap-4 text-sm">
+            <Link 
+              to="/privacidade" 
+              className="hover:opacity-80 transition-opacity underline underline-offset-2"
+            >
+              Política de Privacidade
+            </Link>
+            <span className="opacity-60">|</span>
+            <Link 
+              to="/termos" 
+              className="hover:opacity-80 transition-opacity underline underline-offset-2"
+            >
+              Termos de Uso
+            </Link>
           </div>
           
           <p className="text-sm opacity-80 text-center">
