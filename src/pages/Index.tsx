@@ -6,9 +6,8 @@ import { useEffect } from "react";
 
 const Index = () => {
   useEffect(() => {
-    document.title = "Helena Explora - Estudar nos Estados Unidos";
+    document.title = "Helena Explora";
     
-    // Update meta description
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute("content", "Junte-se à comunidade Helena Explora e receba dicas sobre como estudar nos Estados Unidos. Informações sobre programas, CPT, OPT, bolsas e vida acadêmica.");
