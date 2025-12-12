@@ -1,5 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
-import { DollarSign } from "lucide-react";
+import { DollarSign, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   FormField,
   FormItem,
@@ -33,6 +39,16 @@ const FinancialSection = ({ form }: Props) => {
       <h2 className="section-title">
         <DollarSign className="w-5 h-5" />
         Situação Financeira *
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
+              <HelpCircle className="w-4 h-4" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm">
+              <p>Esta pergunta é confidencial e não pede valores. Ela serve apenas para identificar que tipo de conteúdos a comunidade mais precisa — bolsas, caminhos acessíveis ou alternativas económicas.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h2>
 
       <div className="grid grid-cols-1 gap-4">
