@@ -28,6 +28,7 @@ const formSchema = z.object({
   isCurrentlyWorking: z.string().min(1, "Selecione uma opção"),
   workArea: z.string().max(100).optional(),
   yearsExperience: z.string().optional(),
+  previousWork: z.string().max(500).optional(),
   financialSituation: z.string().optional(),
   usaInterests: z.array(z.string()).optional(),
   usaInterestsOther: z.string().optional(),
@@ -37,6 +38,32 @@ const formSchema = z.object({
   contactPreference: z.string().min(1, "Selecione sua preferência de contato"),
   whatsappContact: z.string().max(20).optional(),
   additionalMessage: z.string().max(1000).optional(),
+}).superRefine((data, ctx) => {
+  if (data.isCurrentlyWorking === "Sim, trabalho atualmente") {
+    if (!data.workArea || data.workArea.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Informe sua área de atuação",
+        path: ["workArea"],
+      });
+    }
+    if (!data.yearsExperience || data.yearsExperience.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Selecione os anos de experiência",
+        path: ["yearsExperience"],
+      });
+    }
+  }
+  if (data.isCurrentlyWorking === "Não, estou buscando oportunidades") {
+    if (!data.previousWork || data.previousWork.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Informe o que você costumava fazer",
+        path: ["previousWork"],
+      });
+    }
+  }
 });
 
 export type LeadFormData = z.infer<typeof formSchema>;
@@ -66,6 +93,7 @@ const LeadForm = () => {
       isCurrentlyWorking: "",
       workArea: "",
       yearsExperience: "",
+      previousWork: "",
       financialSituation: "",
       usaInterests: [],
       usaInterestsOther: "",

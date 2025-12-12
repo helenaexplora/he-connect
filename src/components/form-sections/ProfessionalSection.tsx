@@ -8,6 +8,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -40,6 +41,7 @@ const experienceLevels = [
 const ProfessionalSection = ({ form }: Props) => {
   const isWorking = form.watch("isCurrentlyWorking");
   const showWorkDetails = isWorking === "Sim, trabalho atualmente";
+  const showPreviousWork = isWorking === "Não, estou buscando oportunidades";
 
   return (
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.2s" }}>
@@ -81,7 +83,7 @@ const ProfessionalSection = ({ form }: Props) => {
               name="workArea"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Área de Atuação</FormLabel>
+                  <FormLabel>Área de Atuação *</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Marketing, TI, Finanças, etc." {...field} />
                   </FormControl>
@@ -95,7 +97,7 @@ const ProfessionalSection = ({ form }: Props) => {
               name="yearsExperience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Anos de Experiência</FormLabel>
+                  <FormLabel>Anos de Experiência *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -115,6 +117,26 @@ const ProfessionalSection = ({ form }: Props) => {
               )}
             />
           </div>
+        )}
+
+        {showPreviousWork && (
+          <FormField
+            control={form.control}
+            name="previousWork"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>O que você costumava fazer? *</FormLabel>
+                <FormControl>
+                  <Textarea 
+                    placeholder="Descreva brevemente sua experiência anterior ou área de atuação..."
+                    className="min-h-[100px]"
+                    {...field} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
       </div>
     </div>
