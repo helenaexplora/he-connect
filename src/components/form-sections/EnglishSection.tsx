@@ -1,5 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
-import { Languages } from "lucide-react";
+import { Languages, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   FormField,
   FormItem,
@@ -33,6 +39,16 @@ const EnglishSection = ({ form }: Props) => {
       <h2 className="section-title">
         <Languages className="w-5 h-5" />
         Nível de Inglês
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
+              <HelpCircle className="w-4 h-4" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm">
+              <p>Muitas pessoas começam com níveis diferentes de inglês. Esta informação ajuda-me a preparar conteúdos adequados para quem está a começar e para quem já é avançado.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h2>
 
       <FormField

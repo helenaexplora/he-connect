@@ -1,5 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
-import { Briefcase } from "lucide-react";
+import { Briefcase, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   FormField,
   FormItem,
@@ -48,6 +54,16 @@ const ProfessionalSection = ({ form }: Props) => {
       <h2 className="section-title">
         <Briefcase className="w-5 h-5" />
         Experiência Profissional
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
+              <HelpCircle className="w-4 h-4" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm">
+              <p>Não é uma avaliação. Cada percurso é diferente, e compreender onde você está hoje ajuda-me a abordar temas mais úteis para a comunidade.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h2>
 
       <div className="grid grid-cols-1 gap-4">

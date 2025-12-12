@@ -1,5 +1,11 @@
 import { UseFormReturn } from "react-hook-form";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   FormField,
   FormItem,
@@ -45,6 +51,16 @@ const EducationSection = ({ form }: Props) => {
       <h2 className="section-title">
         <GraduationCap className="w-5 h-5" />
         Formação Académica
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
+              <HelpCircle className="w-4 h-4" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs text-sm">
+              <p>Estas perguntas ajudam-me a entender em que fase dos estudos você está. Assim, consigo criar conteúdos que façam sentido para cada etapa.</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
