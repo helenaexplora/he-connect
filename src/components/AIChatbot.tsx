@@ -43,11 +43,18 @@ const AIChatbot = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const showTimer = setTimeout(() => {
       setShowWelcome(true);
     }, 2000);
 
-    return () => clearTimeout(timer);
+    const hideTimer = setTimeout(() => {
+      setShowWelcome(false);
+    }, 8000);
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -208,8 +215,7 @@ const AIChatbot = () => {
         }}
         className={cn(
           "fixed bottom-4 right-4 md:right-8 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300",
-          "bg-primary text-primary-foreground hover:scale-110",
-          !isOpen && "chatbot-bounce chatbot-pulse"
+          "bg-primary text-primary-foreground hover:scale-110"
         )}
         aria-label={isOpen ? "Fechar chat" : "Abrir chat"}
       >
