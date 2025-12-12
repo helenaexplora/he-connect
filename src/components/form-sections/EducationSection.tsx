@@ -1,11 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { GraduationCap, HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { GraduationCap } from "lucide-react";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 import {
   FormField,
   FormItem,
@@ -50,20 +45,13 @@ const EducationSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.1s" }}>
       <h2 className="section-title">
         <GraduationCap className="w-5 h-5" />
-        Formação Académica
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
-              <HelpCircle className="w-4 h-4" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs text-sm">
-              <p>Estas perguntas ajudam-me a entender em que fase dos estudos você está. Assim, consigo criar conteúdos que façam sentido para cada etapa.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="flex-1">Formação Académica</span>
+        <MobileTooltip 
+          content="Estas perguntas ajudam-me a entender em que fase dos estudos você está. Assim, consigo criar conteúdos que façam sentido para cada etapa."
+        />
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
           name="educationLevel"
@@ -72,13 +60,13 @@ const EducationSection = ({ form }: Props) => {
               <FormLabel>Nível de Educação *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione seu nível" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {educationLevels.map((level) => (
-                    <SelectItem key={level} value={level}>
+                    <SelectItem key={level} value={level} className="py-3">
                       {level}
                     </SelectItem>
                   ))}
@@ -97,7 +85,11 @@ const EducationSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Especifique o Nível *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite seu nível de educação" {...field} />
+                  <Input 
+                    placeholder="Digite seu nível de educação" 
+                    className="h-12"
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,7 +104,11 @@ const EducationSection = ({ form }: Props) => {
             <FormItem>
               <FormLabel>Área de Estudo *</FormLabel>
               <FormControl>
-                <Input placeholder="Ex: Administração, Engenharia, etc." {...field} />
+                <Input 
+                  placeholder="Ex: Administração, Engenharia, etc." 
+                  className="h-12"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -127,13 +123,13 @@ const EducationSection = ({ form }: Props) => {
               <FormLabel>Ano de Conclusão (ou previsto) *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione o ano" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {graduationYears.map((year) => (
-                    <SelectItem key={year} value={year}>
+                    <SelectItem key={year} value={year} className="py-3">
                       {year}
                     </SelectItem>
                   ))}

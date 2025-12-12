@@ -1,11 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { Languages, HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Languages } from "lucide-react";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 import {
   FormField,
   FormItem,
@@ -38,17 +33,10 @@ const EnglishSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.5s" }}>
       <h2 className="section-title">
         <Languages className="w-5 h-5" />
-        Nível de Inglês
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
-              <HelpCircle className="w-4 h-4" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs text-sm">
-              <p>Muitas pessoas começam com níveis diferentes de inglês. Esta informação ajuda-me a preparar conteúdos adequados para quem está a começar e para quem já é avançado.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="flex-1">Nível de Inglês</span>
+        <MobileTooltip 
+          content="Muitas pessoas começam com níveis diferentes de inglês. Esta informação ajuda-me a preparar conteúdos adequados para quem está a começar e para quem já é avançado."
+        />
       </h2>
 
       <FormField
@@ -59,13 +47,13 @@ const EnglishSection = ({ form }: Props) => {
             <FormLabel>Seu Nível de Inglês *</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Selecione seu nível" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
                 {englishLevels.map((level) => (
-                  <SelectItem key={level.value} value={level.value}>
+                  <SelectItem key={level.value} value={level.value} className="py-3">
                     {level.label}
                   </SelectItem>
                 ))}
