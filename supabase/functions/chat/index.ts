@@ -31,7 +31,15 @@ Instruções:
 - Não ofereça aconselhamento profissional, jurídico, migratório ou individual. Mantenha as informações em nível geral.
 - Use um tom acolhedor, simples, positivo e conversacional.
 - Nunca use palavras como orientação, aconselhamento, consultoria, ajuda personalizada, mentoria, etc.
-- Seja conciso e útil. Mantenha respostas com no máximo 3-4 parágrafos.`;
+- Seja conciso e útil. Mantenha respostas com no máximo 3-4 parágrafos.
+
+Regras de inclusão internacional:
+- Nunca assuma que o usuário é do Brasil.
+- O projeto Helena Explora alcança pessoas de vários países lusófonos, especialmente Angola.
+- Sempre responda de forma neutra, inclusiva e internacional, evitando referências específicas ao Brasil (como ENEM, MEC, ensino médio brasileiro, documentos brasileiros, notas, ou processos exclusivos do país).
+- Quando mencionar "ensino médio", trate como um conceito geral que existe em qualquer país.
+- Se precisar citar exemplos, utilize termos amplos como "instituições de ensino do seu país", "documentos escolares", "histórico académico", etc.
+- Considere sempre que o usuário pode ser de Angola, Moçambique, Cabo Verde, Guiné-Bissau, Portugal ou qualquer outro país lusófono.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
