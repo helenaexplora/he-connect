@@ -5,7 +5,8 @@ import { z } from "zod";
 import { toast } from "sonner";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Loader2, Send, CheckCircle } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { Loader2, Send, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 
 import PersonalDataSection from "./form-sections/PersonalDataSection";
 import EducationSection from "./form-sections/EducationSection";
@@ -70,11 +71,33 @@ export type LeadFormData = z.infer<typeof formSchema>;
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAACF73uW-8PrAMmCp";
 
+// Step configuration
+const steps = [
+  { id: 1, title: "Sobre Você", emoji: "👋" },
+  { id: 2, title: "Formação", emoji: "🎓" },
+  { id: 3, title: "Experiência", emoji: "💼" },
+  { id: 4, title: "Recursos", emoji: "💡" },
+  { id: 5, title: "Interesses", emoji: "🇺🇸" },
+  { id: 6, title: "Contato", emoji: "📬" },
+];
+
+// Fields required for each step validation
+const stepFields: Record<number, (keyof LeadFormData)[]> = {
+  1: ["fullName", "email", "country"],
+  2: ["educationLevel", "studyArea", "graduationYear"],
+  3: ["isCurrentlyWorking"],
+  4: ["financialSituation", "englishLevel"],
+  5: [],
+  6: ["howDidYouFind", "contactPreference"],
+};
+
 const LeadForm = () => {
+  const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [turnstileError, setTurnstileError] = useState(false);
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
   const turnstileContainerId = "turnstile-container";
   const widgetIdRef = useRef<string | null>(null);
 
@@ -104,9 +127,14 @@ const LeadForm = () => {
       whatsappContact: "",
       additionalMessage: "",
     },
+    mode: "onChange",
   });
 
+  const progress = (currentStep / steps.length) * 100;
+
   useEffect(() => {
+    if (currentStep !== steps.length) return;
+    
     let mounted = true;
     
     const renderTurnstile = () => {
@@ -142,13 +170,11 @@ const LeadForm = () => {
       }
     };
 
-    // Check if Turnstile is already loaded
     if (window.turnstile) {
       renderTurnstile();
       return;
     }
 
-    // Load Turnstile script if not already present
     const existingScript = document.querySelector('script[src*="turnstile"]');
     if (!existingScript) {
       const script = document.createElement("script");
@@ -157,7 +183,6 @@ const LeadForm = () => {
       document.head.appendChild(script);
     }
     
-    // Define callback
     (window as unknown as Record<string, unknown>).onTurnstileLoad = () => {
       if (mounted) renderTurnstile();
     };
@@ -173,7 +198,46 @@ const LeadForm = () => {
         }
       }
     };
-  }, []);
+  }, [currentStep]);
+
+  const validateCurrentStep = async (): Promise<boolean> => {
+    const fields = stepFields[currentStep];
+    if (fields.length === 0) return true;
+    
+    const result = await form.trigger(fields);
+    
+    // Additional validation for conditional fields
+    if (currentStep === 3) {
+      const isWorking = form.getValues("isCurrentlyWorking");
+      if (isWorking === "Sim, trabalho atualmente") {
+        const workAreaValid = await form.trigger(["workArea", "yearsExperience"]);
+        return result && workAreaValid;
+      }
+      if (isWorking === "Não, estou buscando oportunidades") {
+        const previousWorkValid = await form.trigger(["previousWork"]);
+        return result && previousWorkValid;
+      }
+    }
+    
+    return result;
+  };
+
+  const handleNext = async () => {
+    const isValid = await validateCurrentStep();
+    if (isValid && currentStep < steps.length) {
+      setDirection("forward");
+      setCurrentStep((prev) => prev + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setDirection("backward");
+      setCurrentStep((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const onSubmit = async (data: LeadFormData) => {
     if (!turnstileToken) {
@@ -235,43 +299,143 @@ const LeadForm = () => {
     );
   }
 
+  const renderStep = () => {
+    const animationClass = direction === "forward" 
+      ? "animate-slide-in-right" 
+      : "animate-slide-in-left";
+    
+    return (
+      <div key={currentStep} className={animationClass}>
+        {currentStep === 1 && <PersonalDataSection form={form} />}
+        {currentStep === 2 && <EducationSection form={form} />}
+        {currentStep === 3 && <ProfessionalSection form={form} />}
+        {currentStep === 4 && (
+          <div className="space-y-6">
+            <FinancialSection form={form} />
+            <EnglishSection form={form} />
+          </div>
+        )}
+        {currentStep === 5 && <USAInterestsSection form={form} />}
+        {currentStep === 6 && <CommunicationSection form={form} />}
+      </div>
+    );
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <PersonalDataSection form={form} />
-        <EducationSection form={form} />
-        <ProfessionalSection form={form} />
-        <FinancialSection form={form} />
-        <USAInterestsSection form={form} />
-        <EnglishSection form={form} />
-        <CommunicationSection form={form} />
-
-        <div className="form-section">
-          <div id={turnstileContainerId} className="cf-turnstile flex justify-center mb-4" />
+        {/* Progress Header */}
+        <div className="form-section !p-4 md:!p-6">
+          {/* Step indicator */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{steps[currentStep - 1].emoji}</span>
+              <div>
+                <p className="text-xs text-muted-foreground">
+                  Passo {currentStep} de {steps.length}
+                </p>
+                <h3 className="font-semibold text-primary">
+                  {steps[currentStep - 1].title}
+                </h3>
+              </div>
+            </div>
+            <div className="text-right">
+              <span className="text-2xl font-bold text-primary">
+                {Math.round(progress)}%
+              </span>
+            </div>
+          </div>
           
-          {turnstileError && (
-            <p className="text-sm text-muted-foreground text-center mb-4">
-              Verificação de segurança não disponível. Você ainda pode enviar o formulário.
-            </p>
+          {/* Progress bar */}
+          <Progress value={progress} className="h-2" />
+          
+          {/* Step dots */}
+          <div className="flex justify-between mt-3">
+            {steps.map((step) => (
+              <button
+                key={step.id}
+                type="button"
+                onClick={() => {
+                  if (step.id < currentStep) {
+                    setDirection("backward");
+                    setCurrentStep(step.id);
+                  }
+                }}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium transition-all duration-300 ${
+                  step.id === currentStep
+                    ? "bg-primary text-primary-foreground scale-110"
+                    : step.id < currentStep
+                    ? "bg-accent text-accent-foreground cursor-pointer hover:scale-105"
+                    : "bg-muted text-muted-foreground"
+                }`}
+                disabled={step.id > currentStep}
+              >
+                {step.id < currentStep ? "✓" : step.id}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Form Content */}
+        <div className="min-h-[300px]">
+          {renderStep()}
+        </div>
+
+        {/* Navigation */}
+        <div className="form-section !p-4">
+          {currentStep === steps.length && (
+            <>
+              <div id={turnstileContainerId} className="cf-turnstile flex justify-center mb-4" />
+              {turnstileError && (
+                <p className="text-sm text-muted-foreground text-center mb-4">
+                  Verificação de segurança não disponível. Você ainda pode enviar o formulário.
+                </p>
+              )}
+            </>
           )}
           
-          <Button
-            type="submit"
-            disabled={isSubmitting || !turnstileToken}
-            className="w-full h-12 text-lg font-semibold"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Enviando...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-5 w-5" />
-                Enviar Formulário
-              </>
+          <div className="flex gap-3">
+            {currentStep > 1 && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handlePrevious}
+                className="flex-1 h-12"
+              >
+                <ChevronLeft className="w-5 h-5 mr-1" />
+                Voltar
+              </Button>
             )}
-          </Button>
+            
+            {currentStep < steps.length ? (
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 h-12"
+              >
+                Continuar
+                <ChevronRight className="w-5 h-5 ml-1" />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                disabled={isSubmitting || !turnstileToken}
+                className="flex-1 h-12"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2 h-5 w-5" />
+                    Enviar
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
           
           <p className="text-xs text-muted-foreground text-center mt-4">
             Os seus dados são usados apenas para compreender melhor a comunidade. Veja a nossa{" "}
