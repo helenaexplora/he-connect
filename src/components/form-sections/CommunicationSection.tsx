@@ -46,10 +46,10 @@ const CommunicationSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.6s" }}>
       <h2 className="section-title">
         <MessageSquare className="w-5 h-5" />
-        Comunicação
+        <span className="flex-1">Comunicação</span>
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
           name="howDidYouFind"
@@ -58,13 +58,13 @@ const CommunicationSection = ({ form }: Props) => {
               <FormLabel>Como nos conheceu? *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {howDidYouFindOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option} className="py-3">
                       {option}
                     </SelectItem>
                   ))}
@@ -83,7 +83,11 @@ const CommunicationSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Especifique *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Como nos encontrou?" {...field} />
+                  <Input 
+                    placeholder="Como nos encontrou?" 
+                    className="h-12"
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -99,13 +103,13 @@ const CommunicationSection = ({ form }: Props) => {
               <FormLabel>Preferência de Contato *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {contactPreferences.map((pref) => (
-                    <SelectItem key={pref} value={pref}>
+                    <SelectItem key={pref} value={pref} className="py-3">
                       {pref}
                     </SelectItem>
                   ))}
@@ -124,7 +128,11 @@ const CommunicationSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Contacto WhatsApp *</FormLabel>
                 <FormControl>
-                  <Input placeholder="+351 912 345 678" {...field} />
+                  <Input 
+                    placeholder="+351 912 345 678" 
+                    className="h-12"
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -132,25 +140,23 @@ const CommunicationSection = ({ form }: Props) => {
           />
         )}
 
-        <div className="md:col-span-2">
-          <FormField
-            control={form.control}
-            name="additionalMessage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mensagem Adicional (opcional)</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Algo mais que gostaria de compartilhar?"
-                    className="min-h-[100px] resize-none"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="additionalMessage"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mensagem Adicional (opcional)</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Algo mais que gostaria de compartilhar?"
+                  className="min-h-[100px] resize-none text-base"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
       </div>
     </div>
   );

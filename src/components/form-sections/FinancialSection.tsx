@@ -1,11 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { DollarSign, HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { DollarSign } from "lucide-react";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 import {
   FormField,
   FormItem,
@@ -38,17 +33,10 @@ const FinancialSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.3s" }}>
       <h2 className="section-title">
         <DollarSign className="w-5 h-5" />
-        Situação Financeira *
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
-              <HelpCircle className="w-4 h-4" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs text-sm">
-              <p>Esta pergunta é confidencial e não pede valores. Ela serve apenas para identificar que tipo de conteúdos a comunidade mais precisa — bolsas, caminhos acessíveis ou alternativas económicas.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="flex-1">Situação Financeira *</span>
+        <MobileTooltip 
+          content="Esta pergunta é confidencial e não pede valores. Ela serve apenas para identificar que tipo de conteúdos a comunidade mais precisa — bolsas, caminhos acessíveis ou alternativas económicas."
+        />
       </h2>
 
       <div className="grid grid-cols-1 gap-4">
@@ -57,16 +45,22 @@ const FinancialSection = ({ form }: Props) => {
           name="financialSituation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Como você descreveria a sua situação atual relacionada ao seu sonho de estudar fora?</FormLabel>
+              <FormLabel className="leading-relaxed">
+                Como você descreveria a sua situação atual relacionada ao seu sonho de estudar fora?
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-auto min-h-[48px] whitespace-normal text-left py-3">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {financialSituations.map((situation) => (
-                    <SelectItem key={situation} value={situation}>
+                    <SelectItem 
+                      key={situation} 
+                      value={situation} 
+                      className="py-3 whitespace-normal"
+                    >
                       {situation}
                     </SelectItem>
                   ))}

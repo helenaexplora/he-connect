@@ -35,7 +35,7 @@ const USAInterestsSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.35s" }}>
       <h2 className="section-title">
         <Star className="w-5 h-5" />
-        Interesses Relacionados aos EUA
+        <span className="flex-1">Interesses Relacionados aos EUA</span>
       </h2>
 
       <div className="space-y-4">
@@ -44,15 +44,17 @@ const USAInterestsSection = ({ form }: Props) => {
           name="usaInterests"
           render={() => (
             <FormItem>
-              <FormLabel>O que você mais deseja entender ou acompanhar nos meus conteúdos? (Marque quantos quiser)</FormLabel>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+              <FormLabel className="leading-relaxed">
+                O que você mais deseja entender ou acompanhar nos meus conteúdos? (Marque quantos quiser)
+              </FormLabel>
+              <div className="grid grid-cols-1 gap-3 mt-3">
                 {interestOptions.map((interest) => (
                   <FormField
                     key={interest}
                     control={form.control}
                     name="usaInterests"
                     render={({ field }) => (
-                      <FormItem className="flex items-start space-x-3 space-y-0">
+                      <FormItem className="flex items-start space-x-3 space-y-0 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer">
                         <FormControl>
                           <Checkbox
                             checked={field.value?.includes(interest)}
@@ -64,9 +66,10 @@ const USAInterestsSection = ({ form }: Props) => {
                                 field.onChange(currentValue.filter((v) => v !== interest));
                               }
                             }}
+                            className="mt-0.5 h-5 w-5"
                           />
                         </FormControl>
-                        <FormLabel className="text-sm font-normal cursor-pointer">
+                        <FormLabel className="text-sm font-normal cursor-pointer leading-relaxed flex-1">
                           {interest}
                         </FormLabel>
                       </FormItem>
@@ -77,7 +80,7 @@ const USAInterestsSection = ({ form }: Props) => {
                   control={form.control}
                   name="usaInterests"
                   render={({ field }) => (
-                    <FormItem className="flex items-start space-x-3 space-y-0">
+                    <FormItem className="flex items-start space-x-3 space-y-0 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer">
                       <FormControl>
                         <Checkbox
                           checked={field.value?.includes("Outro")}
@@ -90,9 +93,10 @@ const USAInterestsSection = ({ form }: Props) => {
                               form.setValue("usaInterestsOther", "");
                             }
                           }}
+                          className="mt-0.5 h-5 w-5"
                         />
                       </FormControl>
-                      <FormLabel className="text-sm font-normal cursor-pointer">
+                      <FormLabel className="text-sm font-normal cursor-pointer leading-relaxed flex-1">
                         Outro
                       </FormLabel>
                     </FormItem>
@@ -112,7 +116,11 @@ const USAInterestsSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Especifique outros interesses</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite seus outros interesses..." {...field} />
+                  <Input 
+                    placeholder="Digite seus outros interesses..." 
+                    className="h-12"
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

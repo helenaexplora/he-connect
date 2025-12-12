@@ -40,10 +40,10 @@ const PersonalDataSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in">
       <h2 className="section-title">
         <User className="w-5 h-5" />
-        Dados Pessoais
+        <span className="flex-1">Dados Pessoais</span>
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <FormField
           control={form.control}
           name="fullName"
@@ -51,7 +51,11 @@ const PersonalDataSection = ({ form }: Props) => {
             <FormItem>
               <FormLabel>Nome Completo *</FormLabel>
               <FormControl>
-                <Input placeholder="Seu nome completo" {...field} />
+                <Input 
+                  placeholder="Seu nome completo" 
+                  className="h-12"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -65,7 +69,12 @@ const PersonalDataSection = ({ form }: Props) => {
             <FormItem>
               <FormLabel>Email *</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="seu@email.com" {...field} />
+                <Input 
+                  type="email" 
+                  placeholder="seu@email.com" 
+                  className="h-12"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,13 +89,13 @@ const PersonalDataSection = ({ form }: Props) => {
               <FormLabel>País de Residência *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione seu país" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {countries.map((country) => (
-                    <SelectItem key={country} value={country}>
+                    <SelectItem key={country} value={country} className="py-3">
                       {country}
                     </SelectItem>
                   ))}
@@ -105,7 +114,11 @@ const PersonalDataSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Especifique o País *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Digite o nome do país" {...field} />
+                  <Input 
+                    placeholder="Digite o nome do país" 
+                    className="h-12"
+                    {...field} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -120,7 +133,11 @@ const PersonalDataSection = ({ form }: Props) => {
             <FormItem>
               <FormLabel>Telefone (com código do país)</FormLabel>
               <FormControl>
-                <Input placeholder="+55 11 99999-9999" {...field} />
+                <Input 
+                  placeholder="+55 11 99999-9999" 
+                  className="h-12"
+                  {...field} 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

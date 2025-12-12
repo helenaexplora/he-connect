@@ -1,11 +1,6 @@
 import { UseFormReturn } from "react-hook-form";
-import { Briefcase, HelpCircle } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Briefcase } from "lucide-react";
+import { MobileTooltip } from "@/components/ui/mobile-tooltip";
 import {
   FormField,
   FormItem,
@@ -53,17 +48,10 @@ const ProfessionalSection = ({ form }: Props) => {
     <div className="form-section animate-fade-in" style={{ animationDelay: "0.2s" }}>
       <h2 className="section-title">
         <Briefcase className="w-5 h-5" />
-        Experiência Profissional
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger type="button" className="ml-2 text-muted-foreground hover:text-primary transition-colors">
-              <HelpCircle className="w-4 h-4" />
-            </TooltipTrigger>
-            <TooltipContent className="max-w-xs text-sm">
-              <p>Não é uma avaliação. Cada percurso é diferente, e compreender onde você está hoje ajuda-me a abordar temas mais úteis para a comunidade.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <span className="flex-1">Experiência Profissional</span>
+        <MobileTooltip 
+          content="Não é uma avaliação. Cada percurso é diferente, e compreender onde você está hoje ajuda-me a abordar temas mais úteis para a comunidade."
+        />
       </h2>
 
       <div className="grid grid-cols-1 gap-4">
@@ -75,13 +63,13 @@ const ProfessionalSection = ({ form }: Props) => {
               <FormLabel>Você trabalha atualmente? *</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {workingOptions.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem key={option} value={option} className="py-3">
                       {option}
                     </SelectItem>
                   ))}
@@ -93,7 +81,7 @@ const ProfessionalSection = ({ form }: Props) => {
         />
 
         {showWorkDetails && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
               name="workArea"
@@ -101,7 +89,11 @@ const ProfessionalSection = ({ form }: Props) => {
                 <FormItem>
                   <FormLabel>Área de Atuação *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Marketing, TI, Finanças, etc." {...field} />
+                    <Input 
+                      placeholder="Ex: Marketing, TI, Finanças, etc." 
+                      className="h-12"
+                      {...field} 
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -116,13 +108,13 @@ const ProfessionalSection = ({ form }: Props) => {
                   <FormLabel>Anos de Experiência *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12">
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {experienceLevels.map((level) => (
-                        <SelectItem key={level} value={level}>
+                        <SelectItem key={level} value={level} className="py-3">
                           {level}
                         </SelectItem>
                       ))}
@@ -145,7 +137,7 @@ const ProfessionalSection = ({ form }: Props) => {
                 <FormControl>
                   <Textarea 
                     placeholder="Descreva brevemente sua experiência anterior ou área de atuação..."
-                    className="min-h-[100px]"
+                    className="min-h-[100px] text-base"
                     {...field} 
                   />
                 </FormControl>
