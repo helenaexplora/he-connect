@@ -7,6 +7,7 @@ import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Send, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
+import { isValidPhoneNumber } from "react-phone-number-input";
 
 import PersonalDataSection from "./form-sections/PersonalDataSection";
 import EducationSection from "./form-sections/EducationSection";
@@ -18,8 +19,8 @@ import CommunicationSection from "./form-sections/CommunicationSection";
 
 // Regex to validate names (letters, spaces, accents only - no numbers)
 const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
-// Regex to validate phone numbers (only digits, spaces, +, -, parentheses)
-const phoneRegex = /^[\d\s+\-()]+$/;
+// Regex to validate work area (letters, spaces, accents, common punctuation)
+const textFieldRegex = /^[a-zA-ZÀ-ÿ\s\-,./()&]+$/;
 
 const formSchema = z.object({
   fullName: z.string()
@@ -32,8 +33,7 @@ const formSchema = z.object({
   country: z.string().min(1, "Selecione seu país"),
   countryOther: z.string().max(100, "Máximo de 100 caracteres").optional(),
   phone: z.string()
-    .max(20, "Telefone deve ter no máximo 20 caracteres")
-    .refine((val) => !val || phoneRegex.test(val), "Telefone inválido")
+    .refine((val) => !val || isValidPhoneNumber(val), "Número de telefone inválido")
     .optional(),
   educationLevel: z.string().min(1, "Selecione seu nível de educação"),
   educationLevelOther: z.string().max(100, "Máximo de 100 caracteres").optional(),
@@ -42,7 +42,10 @@ const formSchema = z.object({
     .max(100, "Área de estudo deve ter no máximo 100 caracteres"),
   graduationYear: z.string().min(1, "Selecione o ano de conclusão"),
   isCurrentlyWorking: z.string().min(1, "Selecione uma opção"),
-  workArea: z.string().max(100, "Área de atuação deve ter no máximo 100 caracteres").optional(),
+  workArea: z.string()
+    .max(100, "Área de atuação deve ter no máximo 100 caracteres")
+    .refine((val) => !val || textFieldRegex.test(val), "Área de atuação deve conter apenas letras")
+    .optional(),
   yearsExperience: z.string().optional(),
   previousWork: z.string().max(500, "Máximo de 500 caracteres").optional(),
   financialSituation: z.string().min(1, "Selecione uma opção"),
@@ -53,8 +56,7 @@ const formSchema = z.object({
   howDidYouFindOther: z.string().max(200, "Máximo de 200 caracteres").optional(),
   contactPreference: z.string().min(1, "Selecione sua preferência de contato"),
   whatsappContact: z.string()
-    .max(20, "Número deve ter no máximo 20 caracteres")
-    .refine((val) => !val || phoneRegex.test(val), "Número inválido")
+    .refine((val) => !val || isValidPhoneNumber(val), "Número de WhatsApp inválido")
     .optional(),
   additionalMessage: z.string().max(1000, "Mensagem deve ter no máximo 1000 caracteres").optional(),
 }).superRefine((data, ctx) => {

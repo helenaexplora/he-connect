@@ -8,8 +8,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -17,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { InputWithCounter } from "@/components/ui/input-with-counter";
+import { TextareaWithCounter } from "@/components/ui/textarea-with-counter";
 import { LeadFormData } from "../LeadForm";
 
 interface Props {
@@ -89,10 +89,14 @@ const ProfessionalSection = ({ form }: Props) => {
                 <FormItem>
                   <FormLabel>Área de Atuação *</FormLabel>
                   <FormControl>
-                    <Input 
+                    <InputWithCounter 
                       placeholder="Ex: Marketing, TI, Finanças, etc." 
                       className="h-12"
-                      {...field} 
+                      maxLength={100}
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      name={field.name}
                     />
                   </FormControl>
                   <FormMessage />
@@ -135,10 +139,14 @@ const ProfessionalSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>O que você costumava fazer? *</FormLabel>
                 <FormControl>
-                  <Textarea 
+                  <TextareaWithCounter 
                     placeholder="Descreva brevemente sua experiência anterior ou área de atuação..."
                     className="min-h-[100px] text-base"
-                    {...field} 
+                    maxLength={500}
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    name={field.name}
                   />
                 </FormControl>
                 <FormMessage />

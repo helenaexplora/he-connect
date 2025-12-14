@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { LeadFormData } from "../LeadForm";
 
 interface Props {
@@ -131,12 +132,12 @@ const PersonalDataSection = ({ form }: Props) => {
           name="phone"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Telefone (com código do país)</FormLabel>
+              <FormLabel>Telefone (opcional)</FormLabel>
               <FormControl>
-                <Input 
-                  placeholder="+55 11 99999-9999" 
-                  className="h-12"
-                  {...field} 
+                <PhoneInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Insira seu telefone"
                 />
               </FormControl>
               <FormMessage />

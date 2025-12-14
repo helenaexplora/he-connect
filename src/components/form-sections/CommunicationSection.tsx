@@ -7,7 +7,6 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -16,6 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PhoneInput } from "@/components/ui/phone-input";
+import { InputWithCounter } from "@/components/ui/input-with-counter";
 import { LeadFormData } from "../LeadForm";
 
 interface Props {
@@ -83,10 +84,14 @@ const CommunicationSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Especifique *</FormLabel>
                 <FormControl>
-                  <Input 
+                  <InputWithCounter 
                     placeholder="Como nos encontrou?" 
                     className="h-12"
-                    {...field} 
+                    maxLength={200}
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    name={field.name}
                   />
                 </FormControl>
                 <FormMessage />
@@ -128,10 +133,10 @@ const CommunicationSection = ({ form }: Props) => {
               <FormItem>
                 <FormLabel>Contacto WhatsApp *</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="+351 912 345 678" 
-                    className="h-12"
-                    {...field} 
+                  <PhoneInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Insira seu WhatsApp"
                   />
                 </FormControl>
                 <FormMessage />
@@ -150,6 +155,7 @@ const CommunicationSection = ({ form }: Props) => {
                 <Textarea
                   placeholder="Algo mais que gostaria de compartilhar?"
                   className="min-h-[100px] resize-none text-base"
+                  maxLength={1000}
                   {...field}
                 />
               </FormControl>
