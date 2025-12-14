@@ -16,7 +16,7 @@ const PhoneInputComponent = forwardRef<HTMLInputElement, PhoneInputProps>(
     return (
       <PhoneInput
         international
-        defaultCountry="BR"
+        defaultCountry="AO"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
