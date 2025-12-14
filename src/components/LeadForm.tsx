@@ -16,30 +16,49 @@ import USAInterestsSection from "./form-sections/USAInterestsSection";
 import EnglishSection from "./form-sections/EnglishSection";
 import CommunicationSection from "./form-sections/CommunicationSection";
 
+// Regex to validate names (letters, spaces, accents only - no numbers)
+const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
+// Regex to validate phone numbers (only digits, spaces, +, -, parentheses)
+const phoneRegex = /^[\d\s+\-()]+$/;
+
 const formSchema = z.object({
-  fullName: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
-  email: z.string().email("Email inválido").max(255),
+  fullName: z.string()
+    .min(2, "Nome deve ter pelo menos 2 caracteres")
+    .max(100, "Nome deve ter no máximo 100 caracteres")
+    .regex(nameRegex, "Nome deve conter apenas letras"),
+  email: z.string()
+    .email("Email inválido")
+    .max(255, "Email deve ter no máximo 255 caracteres"),
   country: z.string().min(1, "Selecione seu país"),
-  countryOther: z.string().optional(),
-  phone: z.string().max(20).optional(),
+  countryOther: z.string().max(100, "Máximo de 100 caracteres").optional(),
+  phone: z.string()
+    .max(20, "Telefone deve ter no máximo 20 caracteres")
+    .refine((val) => !val || phoneRegex.test(val), "Telefone inválido")
+    .optional(),
   educationLevel: z.string().min(1, "Selecione seu nível de educação"),
-  educationLevelOther: z.string().optional(),
-  studyArea: z.string().min(1, "Informe sua área de estudo").max(100),
+  educationLevelOther: z.string().max(100, "Máximo de 100 caracteres").optional(),
+  studyArea: z.string()
+    .min(1, "Informe sua área de estudo")
+    .max(100, "Área de estudo deve ter no máximo 100 caracteres"),
   graduationYear: z.string().min(1, "Selecione o ano de conclusão"),
   isCurrentlyWorking: z.string().min(1, "Selecione uma opção"),
-  workArea: z.string().max(100).optional(),
+  workArea: z.string().max(100, "Área de atuação deve ter no máximo 100 caracteres").optional(),
   yearsExperience: z.string().optional(),
-  previousWork: z.string().max(500).optional(),
+  previousWork: z.string().max(500, "Máximo de 500 caracteres").optional(),
   financialSituation: z.string().min(1, "Selecione uma opção"),
   usaInterests: z.array(z.string()).optional(),
-  usaInterestsOther: z.string().optional(),
+  usaInterestsOther: z.string().max(200, "Máximo de 200 caracteres").optional(),
   englishLevel: z.string().min(1, "Selecione seu nível de inglês"),
   howDidYouFind: z.string().min(1, "Informe como nos conheceu"),
-  howDidYouFindOther: z.string().optional(),
+  howDidYouFindOther: z.string().max(200, "Máximo de 200 caracteres").optional(),
   contactPreference: z.string().min(1, "Selecione sua preferência de contato"),
-  whatsappContact: z.string().max(20).optional(),
-  additionalMessage: z.string().max(1000).optional(),
+  whatsappContact: z.string()
+    .max(20, "Número deve ter no máximo 20 caracteres")
+    .refine((val) => !val || phoneRegex.test(val), "Número inválido")
+    .optional(),
+  additionalMessage: z.string().max(1000, "Mensagem deve ter no máximo 1000 caracteres").optional(),
 }).superRefine((data, ctx) => {
+  // Validate conditional work fields
   if (data.isCurrentlyWorking === "Sim, trabalho atualmente") {
     if (!data.workArea || data.workArea.trim() === "") {
       ctx.addIssue({
@@ -64,6 +83,31 @@ const formSchema = z.object({
         path: ["previousWork"],
       });
     }
+  }
+  // Validate WhatsApp contact when WhatsApp is selected
+  if (data.contactPreference === "WhatsApp") {
+    if (!data.whatsappContact || data.whatsappContact.trim() === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Informe seu número de WhatsApp",
+        path: ["whatsappContact"],
+      });
+    }
+  }
+  // Validate "Other" fields when "Outro" is selected
+  if (data.country === "Outro" && (!data.countryOther || data.countryOther.trim() === "")) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Informe seu país",
+      path: ["countryOther"],
+    });
+  }
+  if (data.howDidYouFind === "Outro" && (!data.howDidYouFindOther || data.howDidYouFindOther.trim() === "")) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Informe como nos conheceu",
+      path: ["howDidYouFindOther"],
+    });
   }
 });
 

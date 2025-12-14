@@ -120,10 +120,36 @@ serve(async (req) => {
       });
     }
 
-    const { fullName, email, country, countryOther, phone, educationLevel, educationLevelOther,
-      studyArea, graduationYear, yearsExperience, workArea, programType, programTypeOther,
-      mainQuestions, investmentCapacity, scholarshipInterest, englishLevel, howDidYouFind,
-      howDidYouFindOther, contactPreference, additionalMessage } = data;
+    const { 
+      fullName, email, country, countryOther, phone, 
+      educationLevel, educationLevelOther, studyArea, graduationYear, 
+      isCurrentlyWorking, yearsExperience, workArea, previousWork,
+      financialSituation, usaInterests, usaInterestsOther,
+      englishLevel, howDidYouFind, howDidYouFindOther, 
+      contactPreference, whatsappContact, additionalMessage 
+    } = data;
+
+    // Format USA interests for display
+    const interestsArray = Array.isArray(usaInterests) ? usaInterests : [];
+    const formattedInterests = interestsArray.length > 0 
+      ? interestsArray.join(", ") + (usaInterestsOther ? `, ${usaInterestsOther}` : "")
+      : usaInterestsOther || "Nenhum selecionado";
+
+    // Format work experience based on current status
+    const workExperienceHtml = isCurrentlyWorking === "Sim, trabalho atualmente"
+      ? `<p><strong>Situação:</strong> Trabalha atualmente</p>
+         <p><strong>Anos de Experiência:</strong> ${sanitizeHtml(yearsExperience || "N/A")}</p>
+         <p><strong>Área de Atuação:</strong> ${sanitizeHtml(workArea || "N/A")}</p>`
+      : isCurrentlyWorking === "Não, estou buscando oportunidades"
+      ? `<p><strong>Situação:</strong> Buscando oportunidades</p>
+         <p><strong>Experiência Anterior:</strong> ${sanitizeHtml(previousWork || "N/A")}</p>`
+      : `<p><strong>Situação:</strong> ${sanitizeHtml(isCurrentlyWorking || "N/A")}</p>`;
+
+    // Format contact info based on preference
+    const contactHtml = contactPreference === "WhatsApp"
+      ? `<p><strong>Preferência:</strong> WhatsApp</p>
+         <p><strong>Número WhatsApp:</strong> ${sanitizeHtml(whatsappContact || "N/A")}</p>`
+      : `<p><strong>Preferência:</strong> ${sanitizeHtml(contactPreference)}</p>`;
 
     const leadHtml = `
       <h2>Novo Lead - Helena Explora</h2>
@@ -131,26 +157,23 @@ serve(async (req) => {
       <p><strong>Nome:</strong> ${sanitizeHtml(fullName)}</p>
       <p><strong>Email:</strong> ${sanitizeHtml(email)}</p>
       <p><strong>País:</strong> ${sanitizeHtml(country === "Outro" ? countryOther || country : country)}</p>
-      <p><strong>Telefone:</strong> ${sanitizeHtml(phone)}</p>
+      <p><strong>Telefone:</strong> ${sanitizeHtml(phone || "N/A")}</p>
       <h3>Formação Académica</h3>
       <p><strong>Nível:</strong> ${sanitizeHtml(educationLevel === "Outro" ? educationLevelOther || educationLevel : educationLevel)}</p>
-      <p><strong>Área:</strong> ${sanitizeHtml(studyArea)}</p>
+      <p><strong>Área de Estudo:</strong> ${sanitizeHtml(studyArea)}</p>
       <p><strong>Ano de Conclusão:</strong> ${sanitizeHtml(graduationYear)}</p>
       <h3>Experiência Profissional</h3>
-      <p><strong>Anos:</strong> ${sanitizeHtml(yearsExperience)}</p>
-      <p><strong>Área:</strong> ${sanitizeHtml(workArea)}</p>
-      <h3>Programa de Interesse</h3>
-      <p><strong>Tipo:</strong> ${sanitizeHtml(programType === "Outro" ? programTypeOther || programType : programType)}</p>
-      <p><strong>Dúvidas:</strong> ${sanitizeHtml(mainQuestions || "N/A")}</p>
-      <h3>Financeiro</h3>
-      <p><strong>Capacidade:</strong> ${sanitizeHtml(investmentCapacity)}</p>
-      <p><strong>Interesse em Bolsas:</strong> ${sanitizeHtml(scholarshipInterest)}</p>
-      <h3>Inglês</h3>
+      ${workExperienceHtml}
+      <h3>Situação Financeira</h3>
+      <p><strong>Situação:</strong> ${sanitizeHtml(financialSituation)}</p>
+      <h3>Interesses Relacionados aos EUA</h3>
+      <p><strong>Interesses:</strong> ${sanitizeHtml(formattedInterests)}</p>
+      <h3>Nível de Inglês</h3>
       <p><strong>Nível:</strong> ${sanitizeHtml(englishLevel)}</p>
       <h3>Comunicação</h3>
       <p><strong>Como conheceu:</strong> ${sanitizeHtml(howDidYouFind === "Outro" ? howDidYouFindOther || howDidYouFind : howDidYouFind)}</p>
-      <p><strong>Preferência:</strong> ${sanitizeHtml(contactPreference)}</p>
-      <p><strong>Mensagem:</strong> ${sanitizeHtml(additionalMessage || "N/A")}</p>
+      ${contactHtml}
+      <p><strong>Mensagem Adicional:</strong> ${sanitizeHtml(additionalMessage || "N/A")}</p>
     `;
 
     const welcomeHtml = `
