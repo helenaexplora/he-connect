@@ -29,17 +29,6 @@ I designed and built an AI-assisted web platform that:
 
 ---
 
-## Future Improvements
-
-- Add analytics and dashboards to understand form completion rates and chatbot interaction patterns.
-- Improve accessibility (keyboard navigation, ARIA labels, contrast checks) for mobile-first and inclusive UX.
-- Introduce multi-step form UX with progress indicators to reduce drop-off on long mobile forms.
-- Implement prompt versioning and A/B testing for safer, more consistent AI behavior over time.
-- Expand automated email templates with localization (PT/EN) and better onboarding flows.
-- Add monitoring/alerting for edge functions and email delivery failures (retries, dead-letter handling).
-
----
-
 ## Key Features
 
 - Mini AI chatbot with system-level prompts and behavioral constraints  
@@ -93,6 +82,17 @@ The AI acts as a supportive educational assistant, not a consultant.
 - Real users interacting with the platform  
 - Reduced manual support through AI-assisted flows  
 - Scalable system balancing automation and human oversight  
+
+---
+
+## Future Improvements
+
+- Add analytics and dashboards to understand form completion rates and chatbot interaction patterns.
+- Improve accessibility (keyboard navigation, ARIA labels, contrast checks) for mobile-first and inclusive UX.
+- Introduce multi-step form UX with progress indicators to reduce drop-off on long mobile forms.
+- Implement prompt versioning and A/B testing for safer, more consistent AI behavior over time.
+- Expand automated email templates with localization (PT/EN) and better onboarding flows.
+- Add monitoring/alerting for edge functions and email delivery failures (retries, dead-letter handling).
 
 ---
 
