@@ -1,87 +1,101 @@
-# Helena Explora - Lead Capture Website
+# Helena Explora — AI-Assisted Web Platform
 
-Website de captura de leads para Helena Explora, criadora de conteúdo sobre estudar nos Estados Unidos.
+Helena Explora is an AI-assisted educational web platform designed to share general information and real experiences about studying and living in the United States.
 
-## 🎯 Objetivo
+The project focuses on responsible AI usage, user experience, and security, combining low-code tooling with custom development to build a scalable, real-world system.
 
-Capturar leads de pessoas interessadas em programas de estudo nos EUA, fornecendo informações através de um chatbot de IA e enviando emails automáticos de boas-vindas.
+---
 
-## 🛠️ Tecnologias
+## Problem
 
-- **Frontend**: React, TypeScript, Vite, Tailwind CSS, shadcn/ui
-- **Backend**: Lovable Cloud (Edge Functions)
-- **Email**: Resend
-- **IA**: Lovable AI (Google Gemini)
-- **Segurança**: Cloudflare Turnstile (CAPTCHA)
+Many people interested in studying abroad lack clear and accessible information.  
+At the same time, AI-powered platforms often risk providing unsafe, personalized, or misleading advice.
 
-## 📋 Funcionalidades
+The challenge was to build a system that:
+- uses AI responsibly,
+- remains educational (not advisory),
+- scales without manual support,
+- protects user data and system integrity.
 
-### Formulário de Captura (7 Seções)
-1. **Dados Pessoais** - Nome, email, país, telefone
-2. **Formação Académica** - Nível, área, ano de conclusão
-3. **Experiência Profissional** - Anos, área de atuação
-4. **Programa de Interesse** - Tipo de programa, dúvidas
-5. **Capacidade Financeira** - Investimento, bolsas
-6. **Nível de Inglês** - Iniciante a Fluente
-7. **Comunicação** - Como conheceu, preferência de contato
+---
 
-### Mini-Chatbot "Assistente Explora"
-- Responde dúvidas sobre estudo nos EUA
-- Posicionado no canto inferior direito
-- Bolha de boas-vindas auto-oculta após 8 segundos
-- Sugestões rápidas na primeira interação
-- Inclui disclaimer sobre informações gerais
+## Solution
 
-### Emails Automáticos
-- **Para Helena**: Notificação com todos os dados do lead
-- **Para o lead**: Email de boas-vindas com links das redes sociais
+I designed and built an AI-assisted web platform that:
+- captures user intent through a structured form,
+- provides general educational responses via a controlled AI chatbot,
+- automates communication with strict AI guardrails,
+- prioritizes UX, security, and ethical AI behavior.
 
-## 🔒 Segurança
+---
 
-- ✅ **CAPTCHA Cloudflare Turnstile** - Previne spam
-- ✅ **Sanitização de inputs** - Previne XSS no HTML do email
-- ✅ **Rate limiting** - 5 requisições por minuto por IP
-- ✅ **Mascaramento de logs** - Dados sensíveis não aparecem nos logs
+## Future Improvements
 
-## 🎨 Design
+- Add analytics and dashboards to understand form completion rates and chatbot interaction patterns.
+- Improve accessibility (keyboard navigation, ARIA labels, contrast checks) for mobile-first and inclusive UX.
+- Introduce multi-step form UX with progress indicators to reduce drop-off on long mobile forms.
+- Implement prompt versioning and A/B testing for safer, more consistent AI behavior over time.
+- Expand automated email templates with localization (PT/EN) and better onboarding flows.
+- Add monitoring/alerting for edge functions and email delivery failures (retries, dead-letter handling).
 
-- **Cores**: Azul profissional (#0a2458) e creme (#f5f0e8)
-- **Fontes**: Playfair Display (títulos), Inter (corpo)
-- **Slogan**: "Sonhar é o primeiro visto. O resto é coragem."
+---
 
-## 📁 Estrutura
+## Key Features
 
-```
-src/
-├── components/
-│   ├── Header.tsx
-│   ├── Footer.tsx
-│   ├── LeadForm.tsx
-│   ├── AIChatbot.tsx
-│   └── form-sections/
-│       ├── PersonalDataSection.tsx
-│       ├── EducationSection.tsx
-│       ├── ProfessionalSection.tsx
-│       ├── ProgramSection.tsx
-│       ├── FinancialSection.tsx
-│       ├── EnglishSection.tsx
-│       └── CommunicationSection.tsx
-├── pages/
-│   └── Index.tsx
-└── assets/
-    └── he-logo.jpg
+- Mini AI chatbot with system-level prompts and behavioral constraints  
+- Secure, mobile-first lead capture form  
+- Automated email workflows:
+  - Internal notifications with lead data
+  - User welcome emails with onboarding links  
+- AI safety guardrails preventing personalized or advisory responses  
 
-supabase/functions/
-├── send-lead-email/index.ts
-└── chat/index.ts
-```
+---
 
-## 🔗 Redes Sociais
+## Tech Stack
 
-- YouTube: [@helenaexplora](https://www.youtube.com/@helenaexplora)
-- Instagram: [@helenaexplora_usa](https://www.instagram.com/helenaexplora_usa)
-- TikTok: [@helenaexplora](https://www.tiktok.com/@helenaexplora)
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui  
+- **Backend:** Lovable Cloud (Edge Functions)  
+- **AI:** Lovable AI (Google Gemini)  
+- **Email:** Resend  
+- **Security:**  
+  - Cloudflare Turnstile (CAPTCHA)  
+  - Input sanitization (XSS prevention)  
+  - Rate limiting (5 req/min per IP)  
+  - Log masking (no sensitive data exposure)
 
-## 📧 Contato
+---
 
-Email para leads: helenaexplora@hmpedro.com
+## AI Design & Guardrails
+
+A core part of this project was defining how the AI should behave.
+
+Implemented:
+- system prompts enforcing educational-only responses,
+- strict avoidance of personalized, legal, or immigration advice,
+- consistent tone and scope across chat and email AI,
+- iterative testing using real user scenarios to refine boundaries.
+
+The AI acts as a supportive educational assistant, not a consultant.
+
+---
+
+## Security Considerations
+
+- CAPTCHA protection against spam and abuse  
+- Input sanitization before email rendering  
+- Rate limiting to mitigate automated attacks  
+- Masked logs to avoid exposing sensitive user data  
+
+---
+
+## Impact
+
+- Real users interacting with the platform  
+- Reduced manual support through AI-assisted flows  
+- Scalable system balancing automation and human oversight  
+
+---
+
+## Key Takeaway
+
+This project demonstrates how AI can be integrated into a real product safely and responsibly — as a controlled system component, not as hype.
