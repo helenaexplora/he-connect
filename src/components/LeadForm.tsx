@@ -179,8 +179,6 @@ const LeadForm = () => {
   const progress = (currentStep / steps.length) * 100;
 
   useEffect(() => {
-    if (currentStep !== steps.length) return;
-    
     let mounted = true;
     
     const renderTurnstile = () => {
@@ -244,7 +242,7 @@ const LeadForm = () => {
         }
       }
     };
-  }, [currentStep]);
+  }, []);
 
   const validateCurrentStep = async (): Promise<boolean> => {
     const fields = stepFields[currentStep];
@@ -370,6 +368,26 @@ const LeadForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        {/* Security Verification - At the beginning */}
+        <div className="form-section !p-4 md:!p-6">
+          <div className="flex flex-col items-center gap-3">
+            <p className="text-sm text-muted-foreground text-center">
+              🔒 Verificação de segurança
+            </p>
+            <div id={turnstileContainerId} className="cf-turnstile" />
+            {turnstileError && (
+              <p className="text-xs text-muted-foreground text-center">
+                Verificação não disponível. Você ainda pode enviar o formulário.
+              </p>
+            )}
+            {turnstileToken && !turnstileError && (
+              <p className="text-xs text-accent text-center">
+                ✓ Verificação concluída
+              </p>
+            )}
+          </div>
+        </div>
+
         {/* Progress Header */}
         <div className="form-section !p-4 md:!p-6">
           {/* Step indicator */}
@@ -429,16 +447,6 @@ const LeadForm = () => {
 
         {/* Navigation */}
         <div className="form-section !p-4">
-          {currentStep === steps.length && (
-            <>
-              <div id={turnstileContainerId} className="cf-turnstile flex justify-center mb-4" />
-              {turnstileError && (
-                <p className="text-sm text-muted-foreground text-center mb-4">
-                  Verificação de segurança não disponível. Você ainda pode enviar o formulário.
-                </p>
-              )}
-            </>
-          )}
           
           <div className="flex gap-3">
             {currentStep > 1 && (
