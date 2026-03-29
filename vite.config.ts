@@ -9,10 +9,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      "/chatbot-api": {
-        target: "http://localhost:3000",
+      "/api": {
+        target: "http://aichatbot-api.hmpedro.com",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/chatbot-api/, ""),
       },
     },
   },

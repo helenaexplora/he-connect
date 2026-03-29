@@ -3,7 +3,7 @@ import type { ChatMessage } from "./types";
 const configuredChatApiUrl = import.meta.env.VITE_CHATBOT_API_URL?.replace(/\/$/, "");
 
 export const CHAT_API_BASE_URL =
-  configuredChatApiUrl ?? (import.meta.env.DEV ? "/chatbot-api" : "http://localhost:3000");
+  configuredChatApiUrl ?? (import.meta.env.DEV ? "" : "http://aichatbot-api.hmpedro.com");
 
 export const CONVERSATION_ID_STORAGE_KEY = "helena-explora-chat-conversation-id";
 
