@@ -101,11 +101,21 @@ The AI acts as a supportive educational assistant, not a consultant.
 
 ## Local Configuration
 
-In development, chatbot requests use `/api/*` and are proxied by Vite to `http://aichatbot-api.hmpedro.com`.
-If you need to call a different backend host directly, you can override it with:
+By default:
+
+- development uses `http://localhost:3000` through the Vite `/api/*` proxy
+- production uses `https://aichatbot-api.hmpedro.com`
+
+If you need to force a specific chatbot backend in either environment, you can override it with:
 
 ```env
-VITE_CHATBOT_API_URL="http://aichatbot-api.hmpedro.com"
+VITE_CHATBOT_API_URL="http://localhost:3000"
+```
+
+or:
+
+```env
+VITE_CHATBOT_API_URL="https://aichatbot-api.hmpedro.com"
 ```
 
 Supabase environment variables are still required for the lead email flow.
