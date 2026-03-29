@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Loader2, Send, CheckCircle, ChevronLeft, ChevronRight } from "lucide-react";
 import { isValidPhoneNumber } from "react-phone-number-input";
+import { supabase } from "@/integrations/supabase/client";
 
 import PersonalDataSection from "./form-sections/PersonalDataSection";
 import EducationSection from "./form-sections/EducationSection";
@@ -17,9 +18,7 @@ import USAInterestsSection from "./form-sections/USAInterestsSection";
 import EnglishSection from "./form-sections/EnglishSection";
 import CommunicationSection from "./form-sections/CommunicationSection";
 
-// Regex to validate names (letters, spaces, accents only - no numbers)
 const nameRegex = /^[a-zA-ZÀ-ÿ\s'-]+$/;
-// Regex to validate work area (letters, spaces, accents, common punctuation)
 const textFieldRegex = /^[a-zA-ZÀ-ÿ\s\-,./()&]+$/;
 
 const formSchema = z.object({
@@ -60,7 +59,6 @@ const formSchema = z.object({
     .optional(),
   additionalMessage: z.string().max(1000, "Mensagem deve ter no máximo 1000 caracteres").optional(),
 }).superRefine((data, ctx) => {
-  // Validate conditional work fields
   if (data.isCurrentlyWorking === "Sim, trabalho atualmente") {
     if (!data.workArea || data.workArea.trim() === "") {
       ctx.addIssue({
@@ -69,6 +67,7 @@ const formSchema = z.object({
         path: ["workArea"],
       });
     }
+
     if (!data.yearsExperience || data.yearsExperience.trim() === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -77,6 +76,7 @@ const formSchema = z.object({
       });
     }
   }
+
   if (data.isCurrentlyWorking === "Não, estou buscando oportunidades") {
     if (!data.previousWork || data.previousWork.trim() === "") {
       ctx.addIssue({
@@ -86,7 +86,7 @@ const formSchema = z.object({
       });
     }
   }
-  // Validate WhatsApp contact when WhatsApp is selected
+
   if (data.contactPreference === "WhatsApp") {
     if (!data.whatsappContact || data.whatsappContact.trim() === "") {
       ctx.addIssue({
@@ -96,7 +96,7 @@ const formSchema = z.object({
       });
     }
   }
-  // Validate "Other" fields when "Outro" is selected
+
   if (data.country === "Outro" && (!data.countryOther || data.countryOther.trim() === "")) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -104,6 +104,7 @@ const formSchema = z.object({
       path: ["countryOther"],
     });
   }
+
   if (data.howDidYouFind === "Outro" && (!data.howDidYouFindOther || data.howDidYouFindOther.trim() === "")) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
@@ -117,7 +118,6 @@ export type LeadFormData = z.infer<typeof formSchema>;
 
 const TURNSTILE_SITE_KEY = "0x4AAAAAACF73uW-8PrAMmCp";
 
-// Step configuration
 const steps = [
   { id: 1, title: "Sobre Você", emoji: "👋" },
   { id: 2, title: "Formação", emoji: "🎓" },
@@ -127,7 +127,6 @@ const steps = [
   { id: 6, title: "Contato", emoji: "📬" },
 ];
 
-// Fields required for each step validation
 const stepFields: Record<number, (keyof LeadFormData)[]> = {
   1: ["fullName", "email", "country"],
   2: ["educationLevel", "studyArea", "graduationYear"],
@@ -180,11 +179,11 @@ const LeadForm = () => {
 
   useEffect(() => {
     let mounted = true;
-    
+
     const renderTurnstile = () => {
       const container = document.getElementById(turnstileContainerId);
       if (!container || !window.turnstile || widgetIdRef.current) return;
-      
+
       try {
         widgetIdRef.current = window.turnstile.render(`#${turnstileContainerId}`, {
           sitekey: TURNSTILE_SITE_KEY,
@@ -205,8 +204,8 @@ const LeadForm = () => {
             if (mounted) setTurnstileToken(null);
           },
         });
-      } catch (e) {
-        console.error("Turnstile render error:", e);
+      } catch (error) {
+        console.error("Turnstile render error:", error);
         if (mounted) {
           setTurnstileError(true);
           setTurnstileToken("bypass");
@@ -222,12 +221,12 @@ const LeadForm = () => {
     const existingScript = document.querySelector('script[src*="turnstile"]');
     if (!existingScript) {
       const script = document.createElement("script");
-      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad";
+      script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
       script.async = true;
       document.head.appendChild(script);
     }
-    
-    (window as unknown as Record<string, unknown>).onTurnstileLoad = () => {
+
+    window.onTurnstileLoad = () => {
       if (mounted) renderTurnstile();
     };
 
@@ -237,8 +236,8 @@ const LeadForm = () => {
         try {
           window.turnstile.remove(widgetIdRef.current);
           widgetIdRef.current = null;
-        } catch (e) {
-          console.error("Turnstile cleanup error:", e);
+        } catch (error) {
+          console.error("Turnstile cleanup error:", error);
         }
       }
     };
@@ -247,10 +246,9 @@ const LeadForm = () => {
   const validateCurrentStep = async (): Promise<boolean> => {
     const fields = stepFields[currentStep];
     if (fields.length === 0) return true;
-    
+
     const result = await form.trigger(fields);
-    
-    // Additional validation for conditional fields
+
     if (currentStep === 3) {
       const isWorking = form.getValues("isCurrentlyWorking");
       if (isWorking === "Sim, trabalho atualmente") {
@@ -262,7 +260,7 @@ const LeadForm = () => {
         return result && previousWorkValid;
       }
     }
-    
+
     return result;
   };
 
@@ -291,23 +289,14 @@ const LeadForm = () => {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-lead-email`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({
-            ...data,
-            turnstileToken: turnstileError ? "bypass" : turnstileToken,
-          }),
-        }
-      );
+      const { error } = await supabase.functions.invoke("send-lead-email", {
+        body: {
+          ...data,
+          turnstileToken: turnstileError ? "bypass" : turnstileToken,
+        },
+      });
 
-      if (!response.ok) {
-        const error = await response.json();
+      if (error) {
         throw new Error(error.message || "Erro ao enviar formulário");
       }
 
@@ -319,8 +308,8 @@ const LeadForm = () => {
       if (widgetIdRef.current && window.turnstile) {
         try {
           window.turnstile.reset(widgetIdRef.current);
-        } catch (e) {
-          console.error("Turnstile reset error:", e);
+        } catch (turnstileResetError) {
+          console.error("Turnstile reset error:", turnstileResetError);
         }
       }
       setTurnstileToken(null);
@@ -344,10 +333,10 @@ const LeadForm = () => {
   }
 
   const renderStep = () => {
-    const animationClass = direction === "forward" 
-      ? "animate-slide-in-right" 
+    const animationClass = direction === "forward"
+      ? "animate-slide-in-right"
       : "animate-slide-in-left";
-    
+
     return (
       <div key={currentStep} className={animationClass}>
         {currentStep === 1 && <PersonalDataSection form={form} />}
@@ -368,13 +357,12 @@ const LeadForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Security Verification - At the beginning */}
         <div className="form-section !p-4 md:!p-6">
           <div className="flex flex-col items-center gap-3">
             <p className="text-sm text-muted-foreground text-center">
               🔒 Verificação de segurança
             </p>
-            <div id={turnstileContainerId} className="cf-turnstile" />
+            <div id={turnstileContainerId} />
             {turnstileError && (
               <p className="text-xs text-muted-foreground text-center">
                 Verificação não disponível. Você ainda pode enviar o formulário.
@@ -388,9 +376,7 @@ const LeadForm = () => {
           </div>
         </div>
 
-        {/* Progress Header */}
         <div className="form-section !p-4 md:!p-6">
-          {/* Step indicator */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl">{steps[currentStep - 1].emoji}</span>
@@ -409,11 +395,9 @@ const LeadForm = () => {
               </span>
             </div>
           </div>
-          
-          {/* Progress bar */}
+
           <Progress value={progress} className="h-2" />
-          
-          {/* Step dots */}
+
           <div className="flex justify-between mt-3">
             {steps.map((step) => (
               <button
@@ -429,8 +413,8 @@ const LeadForm = () => {
                   step.id === currentStep
                     ? "bg-primary text-primary-foreground scale-110"
                     : step.id < currentStep
-                    ? "bg-accent text-accent-foreground cursor-pointer hover:scale-105"
-                    : "bg-muted text-muted-foreground"
+                      ? "bg-accent text-accent-foreground cursor-pointer hover:scale-105"
+                      : "bg-muted text-muted-foreground"
                 }`}
                 disabled={step.id > currentStep}
               >
@@ -440,14 +424,11 @@ const LeadForm = () => {
           </div>
         </div>
 
-        {/* Form Content */}
         <div className="min-h-[300px]">
           {renderStep()}
         </div>
 
-        {/* Navigation */}
         <div className="form-section !p-4">
-          
           <div className="flex gap-3">
             {currentStep > 1 && (
               <Button
@@ -460,7 +441,7 @@ const LeadForm = () => {
                 Voltar
               </Button>
             )}
-            
+
             {currentStep < steps.length ? (
               <Button
                 type="button"
@@ -490,7 +471,7 @@ const LeadForm = () => {
               </Button>
             )}
           </div>
-          
+
           <p className="text-xs text-muted-foreground text-center mt-4">
             Os seus dados são usados apenas para compreender melhor a comunidade. Veja a nossa{" "}
             <a href="/privacidade" className="text-primary hover:underline">
@@ -509,12 +490,13 @@ declare global {
       render: (container: string, options: {
         sitekey: string;
         callback: (token: string) => void;
-        'error-callback': () => void;
-        'expired-callback': () => void;
+        "error-callback": () => void;
+        "expired-callback": () => void;
       }) => string;
       reset: (widgetId: string) => void;
       remove: (widgetId: string) => void;
     };
+    onTurnstileLoad?: () => void;
   }
 }
 
