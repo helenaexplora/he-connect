@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-/**
- * ScrollToTop component that scrolls the window to top on route change.
- * Place this component inside BrowserRouter to enable scroll restoration.
- */
+
 export const ScrollToTop = () => {
   const { pathname } = useLocation();
 

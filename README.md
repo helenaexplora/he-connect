@@ -12,6 +12,7 @@ Many people interested in studying abroad lack clear and accessible information.
 At the same time, AI-powered platforms often risk providing unsafe, personalized, or misleading advice.
 
 The challenge was to build a system that:
+
 - uses AI responsibly,
 - remains educational (not advisory),
 - scales without manual support,
@@ -22,6 +23,7 @@ The challenge was to build a system that:
 ## Solution
 
 I designed and built an AI-assisted web platform that:
+
 - captures user intent through a structured form,
 - provides general educational responses via a controlled AI chatbot,
 - automates communication with strict AI guardrails,
@@ -31,25 +33,25 @@ I designed and built an AI-assisted web platform that:
 
 ## Key Features
 
-- Mini AI chatbot with system-level prompts and behavioral constraints  
-- Secure, mobile-first lead capture form  
+- Mini AI chatbot with system-level prompts and behavioral constraints
+- Secure, mobile-first lead capture form
 - Automated email workflows:
   - Internal notifications with lead data
-  - User welcome emails with onboarding links  
-- AI safety guardrails preventing personalized or advisory responses  
+  - User welcome emails with onboarding links
+- AI safety guardrails preventing personalized or advisory responses
 
 ---
 
 ## Tech Stack
 
-- **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui  
-- **Backend:** Lovable Cloud (Edge Functions)  
-- **AI:** Lovable AI (Google Gemini)  
-- **Email:** Resend  
-- **Security:**  
-  - Cloudflare Turnstile (CAPTCHA)  
-  - Input sanitization (XSS prevention)  
-  - Rate limiting (5 req/min per IP)  
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui
+- **Backend:** Lovable Cloud (Edge Functions)
+- **AI:** Lovable AI (Google Gemini)
+- **Email:** Resend
+- **Security:**
+  - Cloudflare Turnstile (CAPTCHA)
+  - Input sanitization (XSS prevention)
+  - Rate limiting (5 req/min per IP)
   - Log masking (no sensitive data exposure)
 
 ---
@@ -59,6 +61,7 @@ I designed and built an AI-assisted web platform that:
 A core part of this project was defining how the AI should behave.
 
 Implemented:
+
 - system prompts enforcing educational-only responses,
 - strict avoidance of personalized, legal, or immigration advice,
 - consistent tone and scope across chat and email AI,
@@ -70,18 +73,18 @@ The AI acts as a supportive educational assistant, not a consultant.
 
 ## Security Considerations
 
-- CAPTCHA protection against spam and abuse  
-- Input sanitization before email rendering  
-- Rate limiting to mitigate automated attacks  
-- Masked logs to avoid exposing sensitive user data  
+- CAPTCHA protection against spam and abuse
+- Input sanitization before email rendering
+- Rate limiting to mitigate automated attacks
+- Masked logs to avoid exposing sensitive user data
 
 ---
 
 ## Impact
 
-- Real users interacting with the platform  
-- Reduced manual support through AI-assisted flows  
-- Scalable system balancing automation and human oversight  
+- Real users interacting with the platform
+- Reduced manual support through AI-assisted flows
+- Scalable system balancing automation and human oversight
 
 ---
 
