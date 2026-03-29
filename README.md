@@ -1,4 +1,4 @@
-# Helena Explora — AI-Assisted Web Platform
+# Helena Explora - AI-Assisted Web Platform
 
 Helena Explora is an AI-assisted educational web platform designed to share general information and real experiences about studying and living in the United States.
 
@@ -8,13 +8,13 @@ The project focuses on responsible AI usage, user experience, and security, comb
 
 ## Problem
 
-Many people interested in studying abroad lack clear and accessible information.  
+Many people interested in studying abroad lack clear and accessible information.
 At the same time, AI-powered platforms often risk providing unsafe, personalized, or misleading advice.
 
 The challenge was to build a system that:
 
 - uses AI responsibly,
-- remains educational (not advisory),
+- remains educational rather than advisory,
 - scales without manual support,
 - protects user data and system integrity.
 
@@ -25,7 +25,7 @@ The challenge was to build a system that:
 I designed and built an AI-assisted web platform that:
 
 - captures user intent through a structured form,
-- provides general educational responses via a controlled AI chatbot,
+- provides general educational responses through a dedicated chatbot API,
 - automates communication with strict AI guardrails,
 - prioritizes UX, security, and ethical AI behavior.
 
@@ -33,7 +33,7 @@ I designed and built an AI-assisted web platform that:
 
 ## Key Features
 
-- Mini AI chatbot with system-level prompts and behavioral constraints
+- Mini AI chatbot connected to an external API with persisted conversation history
 - Secure, mobile-first lead capture form
 - Automated email workflows:
   - Internal notifications with lead data
@@ -45,8 +45,8 @@ I designed and built an AI-assisted web platform that:
 ## Tech Stack
 
 - **Frontend:** React, TypeScript, Vite, Tailwind CSS, shadcn/ui
-- **Backend:** Lovable Cloud (Edge Functions)
-- **AI:** Lovable AI (Google Gemini)
+- **Backend:** Dedicated chatbot API plus Supabase Edge Functions for email flows
+- **AI:** External chatbot service
 - **Email:** Resend
 - **Security:**
   - Cloudflare Turnstile (CAPTCHA)
@@ -62,7 +62,7 @@ A core part of this project was defining how the AI should behave.
 
 Implemented:
 
-- system prompts enforcing educational-only responses,
+- chatbot integration with persisted conversation history,
 - strict avoidance of personalized, legal, or immigration advice,
 - consistent tone and scope across chat and email AI,
 - iterative testing using real user scenarios to refine boundaries.
@@ -95,10 +95,22 @@ The AI acts as a supportive educational assistant, not a consultant.
 - Introduce multi-step form UX with progress indicators to reduce drop-off on long mobile forms.
 - Implement prompt versioning and A/B testing for safer, more consistent AI behavior over time.
 - Expand automated email templates with localization (PT/EN) and better onboarding flows.
-- Add monitoring/alerting for edge functions and email delivery failures (retries, dead-letter handling).
+- Add monitoring and alerting for API and email delivery failures.
+
+---
+
+## Local Configuration
+
+The chatbot UI defaults to `http://localhost:3000`. You can override it with:
+
+```env
+VITE_CHATBOT_API_URL="http://localhost:3000"
+```
+
+Supabase environment variables are still required for the lead email flow.
 
 ---
 
 ## Key Takeaway
 
-This project demonstrates how AI can be integrated into a real product safely and responsibly — as a controlled system component, not as hype.
+This project demonstrates how AI can be integrated into a real product safely and responsibly - as a controlled system component, not as hype.
