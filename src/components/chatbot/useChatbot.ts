@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import type { MutableRefObject } from "react";
 import {
   ChatApiError,
   fetchConversationHistory,
@@ -16,6 +17,9 @@ import {
   getStoredConversationId,
 } from "./storage";
 import type { ChatMessage } from "./types";
+
+const notificationSoundFile = "/sounds/notification.mp3";
+const popSoundFile = "/sounds/pop.mp3";
 
 const getErrorMessage = (error: unknown, fallbackMessage: string) => {
   if (error instanceof ChatApiError) {
@@ -39,6 +43,19 @@ const getErrorMessage = (error: unknown, fallbackMessage: string) => {
   return fallbackMessage;
 };
 
+const playAudio = async (audioRef: MutableRefObject<HTMLAudioElement | null>) => {
+  if (!audioRef.current) {
+    return;
+  }
+
+  try {
+    audioRef.current.currentTime = 0;
+    await audioRef.current.play();
+  } catch (error) {
+    console.error("Audio playback error:", error);
+  }
+};
+
 export const useChatbot = () => {
   const [conversationId, setConversationId] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -52,9 +69,31 @@ export const useChatbot = () => {
   const [showSuggestions, setShowSuggestions] = useState(true);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const botReplyAudioRef = useRef<HTMLAudioElement | null>(null);
+  const userMessageAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     setConversationId(getConversationId());
+  }, []);
+
+  useEffect(() => {
+    botReplyAudioRef.current = new Audio(notificationSoundFile);
+    botReplyAudioRef.current.preload = "auto";
+
+    userMessageAudioRef.current = new Audio(popSoundFile);
+    userMessageAudioRef.current.preload = "auto";
+
+    return () => {
+      if (botReplyAudioRef.current) {
+        botReplyAudioRef.current.pause();
+        botReplyAudioRef.current.currentTime = 0;
+      }
+
+      if (userMessageAudioRef.current) {
+        userMessageAudioRef.current.pause();
+        userMessageAudioRef.current.currentTime = 0;
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -168,6 +207,7 @@ export const useChatbot = () => {
     setInput("");
     setShowSuggestions(false);
     setMessages((prev) => [...prev, { role: "user", content: textToSend }]);
+    void playAudio(userMessageAudioRef);
     setIsLoading(true);
 
     try {
@@ -176,6 +216,7 @@ export const useChatbot = () => {
         ...prev,
         { role: "assistant", content: assistantMessage },
       ]);
+      void playAudio(botReplyAudioRef);
     } catch (error) {
       console.error("Chat error:", error);
       setError(getErrorMessage(error, CHAT_ERROR_MESSAGES.generic));
