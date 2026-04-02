@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
-
-const notificationSoundFile = "/sounds/notification.mp3";
-const popSoundFile = "/sounds/pop.mp3";
+import notificationSoundFile from "@/assets/sounds/notification.mp3";
+import popSoundFile from "@/assets/sounds/pop.mp3";
 
 const playAudio = async (audio: HTMLAudioElement | null) => {
   if (!audio) {
